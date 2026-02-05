@@ -1,0 +1,21 @@
+// Component-specific styles
+// Inherits from global styles.scss
+
+:host {
+	display: block;
+}
+
+.animate-scale-in {
+	animation: scale-in 200ms ease-out;
+}
+
+@keyframes scale-in {
+	from {
+		transform: scale(0.98);
+		opacity: 0.6;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}

@@ -1,0 +1,488 @@
+version: '3.8'
+
+services:
+  # Infrastructure Services
+  
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: axisride-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - axisride-network
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: axisride-kafka
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_NUM_PARTITIONS=3
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    volumes:
+      - kafka_data:/bitnami/kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  postgres:
+    image: postgis/postgis:15-3.4-alpine
+    container_name: axisride-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=axisride_auth,axisride_user,axisride_trip,axisride_payment,axisride_chat,axisride_geolocation,axisride_notification,axisride_loyalty,axisride_analytics,axisride_content
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - axisride-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: axisride-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - axisride-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: axisride-keycloak
+    ports:
+      - "8180:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME_PORT=8180
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    command: start-dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  # Spring Cloud Services
+
+  config-server:
+    image: eclipse-temurin:17-jre-alpine
+    container_name: axisride-config-server
+    ports:
+      - "8888:8888"
+    environment:
+      - CONFIG_GIT_URI=${CONFIG_GIT_URI:-https://github.com/axisride/config-repo}
+      - EUREKA_URI=http://discovery-server:8761/eureka
+    command: >
+      sh -c "echo 'Config Server placeholder - implement with Spring Cloud Config' && sleep infinity"
+    networks:
+      - axisride-network
+
+  discovery-server:
+    image: eclipse-temurin:17-jre-alpine
+    container_name: axisride-discovery-server
+    ports:
+      - "8761:8761"
+    command: >
+      sh -c "echo 'Discovery Server placeholder - implement with Eureka' && sleep infinity"
+    networks:
+      - axisride-network
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: axisride-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  # Business Services
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: axisride-auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_auth
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - JWT_SECRET=${JWT_SECRET:-YXhpc3JpZGUtc2VjcmV0LWtleS1mb3ItZGV2ZWxvcG1lbnQtb25seS1jaGFuZ2UtaW4tcHJvZHVjdGlvbg==}
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: axisride-user-service
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_user
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  trip-service:
+    build:
+      context: .
+      dockerfile: trip-service/Dockerfile
+    container_name: axisride-trip-service
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_trip
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    container_name: axisride-payment-service
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_payment
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: chat-service/Dockerfile
+    container_name: axisride-chat-service
+    ports:
+      - "8085:8085"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_chat
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  geolocation-service:
+    build:
+      context: .
+      dockerfile: geolocation-service/Dockerfile
+    container_name: axisride-geolocation-service
+    ports:
+      - "8086:8086"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_geolocation
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: axisride-notification-service
+    ports:
+      - "8087:8087"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_notification
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  loyalty-service:
+    build:
+      context: .
+      dockerfile: loyalty-service/Dockerfile
+    container_name: axisride-loyalty-service
+    ports:
+      - "8088:8088"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_loyalty
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8088/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: analytics-service/Dockerfile
+    container_name: axisride-analytics-service
+    ports:
+      - "8089:8089"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_analytics
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8089/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+  content-service:
+    build:
+      context: .
+      dockerfile: content-service/Dockerfile
+    container_name: axisride-content-service
+    ports:
+      - "8090:8090"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=axisride_content
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - axisride-network
+
+networks:
+  axisride-network:
+    driver: bridge
+
+volumes:
+  zookeeper_data:
+  kafka_data:
+  postgres_data:
+  redis_data:

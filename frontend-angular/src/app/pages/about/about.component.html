@@ -1,0 +1,139 @@
+<div class="min-h-screen bg-background">
+  <div class="h-16"></div>
+
+  <section class="pt-20 pb-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+        <span>👥</span>
+        {{ 'about.hero.badge' | translate }}
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-6 font-heading">
+        {{ 'about.hero.title1' | translate }} <span class="gradient-text">{{ 'about.hero.title2' | translate }}</span>
+      </h1>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        {{ 'about.hero.subtitle' | translate }}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 bg-muted/30">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-foreground mb-6 font-heading">{{ 'about.mission.title' | translate }}</h2>
+          <p class="text-muted-foreground mb-6">
+            {{ 'about.mission.p1' | translate }}
+          </p>
+          <p class="text-muted-foreground mb-6">
+            {{ 'about.mission.p2' | translate }}
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary font-heading">3</div>
+              <div class="text-sm text-muted-foreground">{{ 'about.mission.countries' | translate }}</div>
+            </div>
+            <div class="w-px h-12 bg-border"></div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary font-heading">50+</div>
+              <div class="text-sm text-muted-foreground">{{ 'about.mission.cities' | translate }}</div>
+            </div>
+            <div class="w-px h-12 bg-border"></div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary font-heading">10K+</div>
+              <div class="text-sm text-muted-foreground">{{ 'about.mission.users' | translate }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <img
+            src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&h=400&fit=crop"
+            alt="Team collaboration"
+            class="rounded-2xl w-full object-cover"
+          />
+          <div class="absolute -bottom-6 -left-6 bg-primary text-primary-foreground p-6 rounded-2xl">
+            <div class="text-2xl">📍</div>
+            <div class="font-semibold">Dakar, Sénégal</div>
+            <div class="text-sm opacity-80">{{ 'about.mission.headquarters' | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4 font-heading">{{ 'about.values.title' | translate }}</h2>
+        <p class="text-muted-foreground">{{ 'about.values.subtitle' | translate }}</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let value of values" class="bg-card border border-border/50 rounded-xl p-6 card-hover">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4">
+            <span *ngIf="value.icon === 'heart'">❤️</span>
+            <span *ngIf="value.icon === 'target'">🎯</span>
+            <span *ngIf="value.icon === 'globe'">🌍</span>
+            <span *ngIf="value.icon === 'award'">🏆</span>
+          </div>
+          <h3 class="font-semibold text-foreground mb-2 font-heading">{{ value.titleKey | translate }}</h3>
+          <p class="text-sm text-muted-foreground">{{ value.descriptionKey | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4 bg-muted/30">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-16 font-heading">{{ 'about.timeline.title' | translate }}</h2>
+      <div class="relative">
+        <div class="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-primary/20"></div>
+        <div *ngFor="let milestone of milestones; let i = index" class="relative flex items-center mb-8" [class.flex-row-reverse]="i % 2 !== 0">
+          <div class="w-1/2" [class.pr-12]="i % 2 === 0" [class.pl-12]="i % 2 !== 0" [class.text-right]="i % 2 === 0" [class.text-left]="i % 2 !== 0">
+            <div class="text-primary font-bold font-heading">{{ milestone.year }}</div>
+            <div class="text-foreground">{{ milestone.eventKey | translate }}</div>
+          </div>
+          <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-background"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4 font-heading">{{ 'about.team.title' | translate }}</h2>
+        <p class="text-muted-foreground">{{ 'about.team.subtitle' | translate }}</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let member of team" class="bg-card border border-border/50 rounded-xl p-6 text-center card-hover">
+          <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary mb-4 flex items-center justify-center">
+            <span class="text-3xl font-bold text-primary-foreground font-heading">{{ member.initials }}</span>
+          </div>
+          <h3 class="font-semibold text-foreground font-heading">{{ member.nameKey | translate }}</h3>
+          <div class="text-sm text-primary mb-3">{{ member.roleKey | translate }}</div>
+          <p class="text-sm text-muted-foreground mb-4">{{ member.bioKey | translate }}</p>
+          <div class="flex justify-center gap-2">
+            <button class="w-8 h-8 rounded-full hover:bg-muted">in</button>
+            <button class="w-8 h-8 rounded-full hover:bg-muted">x</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4 bg-primary">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-primary-foreground mb-6 font-heading">
+        {{ 'about.cta.title' | translate }}
+      </h2>
+      <p class="text-primary-foreground/80 text-lg mb-8">
+        {{ 'about.cta.subtitle' | translate }}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a routerLink="/auth" class="bg-primary-foreground text-primary hover:bg-primary-foreground/90 rounded-full px-8 py-4 font-semibold">{{ 'about.cta.createAccount' | translate }}</a>
+        <a routerLink="/careers" class="border border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 rounded-full px-8 py-4">{{ 'about.cta.viewJobs' | translate }}</a>
+      </div>
+    </div>
+  </section>
+</div>

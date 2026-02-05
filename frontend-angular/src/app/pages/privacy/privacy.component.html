@@ -1,0 +1,64 @@
+<div class="min-h-screen bg-background">
+  <div class="h-16"></div>
+
+  <section class="pt-20 pb-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+        <span>🛡️</span>
+        {{ 'privacy.hero.badge' | translate }}
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-6 font-heading">
+        {{ 'privacy.hero.title' | translate }}
+      </h1>
+      <p class="text-muted-foreground">{{ 'common.lastUpdated' | translate }}: {{ lastUpdated }}</p>
+    </div>
+  </section>
+
+  <section class="pb-8 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-primary/5 border border-primary/20 rounded-xl p-6">
+        <p class="text-foreground">
+          {{ 'privacy.intro' | translate }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-8 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-muted/30 border border-border/50 rounded-xl p-6">
+        <h2 class="font-semibold text-foreground mb-4">{{ 'privacy.toc' | translate }}</h2>
+        <div class="grid md:grid-cols-2 gap-2">
+          <a *ngFor="let section of sections" [href]="'#' + section.id" class="text-sm text-muted-foreground hover:text-primary transition-colors">
+            {{ section.titleKey | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-8 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <div *ngFor="let section of sections" [id]="section.id" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-foreground mb-4 font-heading">{{ section.titleKey | translate }}</h2>
+        <div class="text-muted-foreground whitespace-pre-line leading-relaxed">{{ section.contentKey | translate }}</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="fixed bottom-8 right-8">
+    <button class="rounded-full bg-primary hover:bg-primary/90 w-12 h-12 shadow-lg text-primary-foreground" (click)="scrollToTop()">
+      ↑
+    </button>
+  </div>
+
+  <section class="py-12 px-4 bg-muted/30">
+    <div class="max-w-4xl mx-auto text-center">
+      <h3 class="font-semibold text-foreground mb-6">{{ 'privacy.relatedDocs' | translate }}</h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a routerLink="/terms" class="rounded-full border border-border px-5 py-2 hover:bg-muted">{{ 'common.terms' | translate }}</a>
+        <a routerLink="/cookies" class="rounded-full border border-border px-5 py-2 hover:bg-muted">{{ 'common.cookies' | translate }}</a>
+      </div>
+    </div>
+  </section>
+</div>

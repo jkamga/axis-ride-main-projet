@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-background">
+  <div class="h-16"></div>
+
+  <section class="pt-20 pb-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-6">
+        <span>🍪</span>
+        {{ 'cookies.hero.badge' | translate }}
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-6 font-heading">
+        {{ 'cookies.hero.title' | translate }}
+      </h1>
+      <p class="text-muted-foreground">{{ 'common.lastUpdated' | translate }}: {{ lastUpdated }}</p>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold text-foreground mb-8 font-heading">{{ 'cookies.types.title' | translate }}</h2>
+      <div class="space-y-6">
+        <div *ngFor="let cookie of cookieTypes" class="bg-card border border-border/50 rounded-xl p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                🍪
+              </div>
+              <div>
+                <h3 class="font-semibold text-foreground">{{ cookie.nameKey | translate }}</h3>
+                <span *ngIf="cookie.required" class="text-xs text-primary">{{ 'cookies.types.essential.required' | translate }}</span>
+              </div>
+            </div>
+            <div class="text-sm text-muted-foreground">
+              {{ cookie.required ? ('cookies.types.essential.required' | translate) : ('cookies.types.configurable' | translate) }}
+            </div>
+          </div>
+          <p class="text-muted-foreground mb-4">{{ cookie.descriptionKey | translate }}</p>
+          <div class="bg-muted/30 rounded-lg p-4">
+            <div class="text-sm font-medium text-foreground mb-2">{{ 'cookies.examples' | translate }}</div>
+            <ul class="text-sm text-muted-foreground space-y-1">
+              <li *ngFor="let exampleKey of cookie.examplesKeys" class="flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+                {{ exampleKey | translate }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-8 px-4 bg-muted/30">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-card border border-border/50 rounded-xl p-6">
+        <h2 class="font-semibold text-foreground mb-4">{{ 'cookies.toc' | translate }}</h2>
+        <div class="grid md:grid-cols-2 gap-2">
+          <a *ngFor="let section of sections" [href]="'#' + section.id" class="text-sm text-muted-foreground hover:text-primary transition-colors">
+            {{ section.titleKey | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <div *ngFor="let section of sections" [id]="section.id" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-foreground mb-4 font-heading">{{ section.titleKey | translate }}</h2>
+        <div class="text-muted-foreground whitespace-pre-line leading-relaxed">{{ section.contentKey | translate }}</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="fixed bottom-8 right-8">
+    <button class="rounded-full bg-primary hover:bg-primary/90 w-12 h-12 shadow-lg text-primary-foreground" (click)="scrollToTop()">
+      ↑
+    </button>
+  </div>
+
+  <section class="py-12 px-4 bg-muted/30">
+    <div class="max-w-4xl mx-auto text-center">
+      <h3 class="font-semibold text-foreground mb-6">{{ 'cookies.relatedDocs' | translate }}</h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a routerLink="/terms" class="rounded-full border border-border px-5 py-2 hover:bg-muted">{{ 'common.terms' | translate }}</a>
+        <a routerLink="/privacy" class="rounded-full border border-border px-5 py-2 hover:bg-muted">{{ 'common.privacy' | translate }}</a>
+      </div>
+    </div>
+  </section>
+</div>

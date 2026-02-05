@@ -1,0 +1,477 @@
+{
+  "common": {
+    "login": "Log in",
+    "logout": "Log out",
+    "register": "Sign up",
+    "dashboard": "Dashboard",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "community": "Community",
+    "profile": "Profile",
+    "settings": "Settings",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "back": "Back",
+    "viewAll": "View all",
+    "learnMore": "Learn more",
+    "lastUpdated": "Last updated",
+    "apply": "Apply",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies"
+  },
+  "nav": {
+    "home": "Home",
+    "trips": "Trips",
+    "myTrips": "My trips",
+    "bookings": "Bookings",
+    "messages": "Messages",
+    "notifications": "Notifications",
+    "help": "Help",
+    "about": "About",
+    "contact": "Contact",
+    "pricing": "Pricing",
+    "careers": "Careers"
+  },
+  "landing": {
+    "hero": {
+      "badge": "🚗 #1 Carpooling Platform in Africa",
+      "title1": "Travel Together,",
+      "title2": "Save Smart",
+      "subtitle": "Connect with verified drivers and passengers for safe, affordable, and eco-friendly rides across Africa.",
+      "ctaPassenger": "Find a ride",
+      "ctaDriver": "Offer a ride"
+    },
+    "stats": {
+      "users": "Active users",
+      "trips": "Completed trips",
+      "axes": "Cities connected",
+      "satisfaction": "Satisfaction rate"
+    },
+    "features": {
+      "title": "Why choose AxisRide?",
+      "subtitle": "Experience the best carpooling service with features designed for your comfort and safety",
+      "reliable": {
+        "title": "Reliable Transport",
+        "description": "Verified drivers and real-time tracking for peace of mind"
+      },
+      "community": {
+        "title": "Active Community",
+        "description": "Join thousands of users traveling together every day"
+      },
+      "payment": {
+        "title": "Secure Payment",
+        "description": "Multiple payment options including Mobile Money"
+      },
+      "price": {
+        "title": "Best Prices",
+        "description": "Save up to 70% compared to traditional transport"
+      }
+    },
+    "howItWorks": {
+      "title": "How it works?",
+      "subtitle": "Traveling with AxisRide is simple and fast",
+      "search": {
+        "title": "Search",
+        "description": "Find a trip that matches your route"
+      },
+      "book": {
+        "title": "Book",
+        "description": "Choose your seat and confirm your booking"
+      },
+      "travel": {
+        "title": "Travel",
+        "description": "Enjoy your trip safely"
+      }
+    },
+    "testimonials": {
+      "title": "What our users say",
+      "subtitle": "Thousands of people trust AxisRide"
+    },
+    "cta": {
+      "title": "Ready to start?",
+      "subtitle": "Join the AxisRide community today",
+      "button": "Get started now"
+    },
+    "footer": {
+      "description": "Africa's trusted carpooling platform",
+      "company": "Company",
+      "about": "About",
+      "careers": "Careers",
+      "contact": "Contact",
+      "legal": "Legal",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookies": "Cookies",
+      "social": "Social media",
+      "rights": "All rights reserved."
+    }
+  },
+  "auth": {
+    "title": "Welcome to AxisRide",
+    "subtitle": "Log in to continue",
+    "loginTab": "Log in",
+    "registerTab": "Sign up",
+    "phone": "Phone number",
+    "phonePlaceholder": "+237 6XX XXX XXX",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "John Doe",
+    "role": "I am a",
+    "passenger": "Passenger",
+    "driver": "Driver",
+    "otp": "OTP Code",
+    "otpSent": "Code sent to",
+    "otpPlaceholder": "Enter 6-digit code",
+    "loginButton": "Log in",
+    "registerButton": "Sign up",
+    "verifyButton": "Verify",
+    "resendOtp": "Resend code",
+    "backToPhone": "Change number",
+    "demoOtp": "Demo code",
+    "errors": {
+      "phoneRequired": "Phone number is required",
+      "nameRequired": "Full name is required",
+      "otpInvalid": "Invalid OTP code",
+      "otpRequired": "Please enter the complete code"
+    },
+    "success": {
+      "otpSent": "OTP code sent",
+      "registered": "Registration successful",
+      "loggedIn": "Login successful"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "passenger": {
+      "title": "My Dashboard",
+      "stats": {
+        "totalTrips": "Trips completed",
+        "upcomingTrips": "Upcoming trips",
+        "savedMoney": "Money saved",
+        "carbonSaved": "CO2 saved"
+      },
+      "upcomingTrips": "Upcoming trips",
+      "recentTrips": "Recent trips",
+      "noTrips": "No trips",
+      "bookTrip": "Book a trip"
+    },
+    "driver": {
+      "title": "Driver Dashboard",
+      "stats": {
+        "totalTrips": "Trips offered",
+        "totalEarnings": "Total earnings",
+        "rating": "Average rating",
+        "passengers": "Passengers transported"
+      },
+      "activeTrips": "Active trips",
+      "earnings": "Earnings",
+      "createTrip": "Create a trip"
+    }
+  },
+  "trip": {
+    "from": "From",
+    "to": "To",
+    "date": "Date",
+    "time": "Time",
+    "seats": "Seats",
+    "price": "Price",
+    "driver": "Driver",
+    "passenger": "Passenger",
+    "status": {
+      "planned": "Planned",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "details": {
+      "title": "Trip details",
+      "route": "Route",
+      "duration": "Duration",
+      "distance": "Distance",
+      "availableSeats": "Available seats",
+      "meetingPoint": "Meeting point",
+      "preferences": "Preferences",
+      "smoking": "Smoking",
+      "music": "Music",
+      "pets": "Pets",
+      "luggage": "Luggage"
+    },
+    "booking": {
+      "title": "Book this trip",
+      "selectSeats": "Number of seats",
+      "totalPrice": "Total price",
+      "bookNow": "Book now",
+      "confirmBooking": "Confirm booking",
+      "bookingSuccess": "Booking confirmed!"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal information",
+    "fullName": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "bio": "Bio",
+    "documents": "Documents",
+    "license": "Driver's license",
+    "idCard": "ID card",
+    "preferences": "Preferences",
+    "language": "Language",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "reviews": "Reviews",
+    "rating": "Rating",
+    "trips": "Trips",
+    "saveChanges": "Save changes"
+  },
+  "about": {
+    "hero": {
+      "badge": "About AxisRide",
+      "title1": "Travel together,",
+      "title2": "go further",
+      "subtitle": "AxisRide connects drivers and passengers for safe, affordable, and sustainable trips across Africa."
+    },
+    "mission": {
+      "title": "Our mission",
+      "p1": "Make carpooling accessible and reduce transport costs while building trust between travelers.",
+      "p2": "We combine technology, safety, and community to deliver a reliable experience at scale.",
+      "countries": "Countries",
+      "cities": "Cities",
+      "users": "Users",
+      "headquarters": "Regional headquarters"
+    },
+    "values": {
+      "title": "Our values",
+      "subtitle": "What guides our team every day.",
+      "community": {
+        "title": "Community",
+        "description": "Build lasting connections between drivers and passengers."
+      },
+      "accessibility": {
+        "title": "Accessibility",
+        "description": "Make carpooling simple and affordable for everyone."
+      },
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "Reduce carbon footprint on every trip."
+      },
+      "excellence": {
+        "title": "Excellence",
+        "description": "Deliver a reliable and secure experience."
+      }
+    },
+    "timeline": {
+      "title": "Our journey",
+      "2022_1": "Launched first trips in Senegal.",
+      "2023_1": "Expanded to Mali and Côte d’Ivoire.",
+      "2023_2": "Reached 5,000 active users.",
+      "2024_1": "Rolled out secure payments.",
+      "2024_2": "10,000+ trips completed."
+    },
+    "team": {
+      "title": "Our team",
+      "subtitle": "Experts committed to mobility in Africa.",
+      "amadou": { "name": "Amadou Diallo", "role": "CEO & Founder", "bio": "Passionate about mobility and innovation in Africa." },
+      "fatou": { "name": "Fatou Sarr", "role": "Head of Product", "bio": "Designs inclusive and simple experiences." },
+      "moussa": { "name": "Moussa Koné", "role": "CTO", "bio": "Leads the platform and technical architecture." },
+      "aicha": { "name": "Aïcha Traoré", "role": "Community", "bio": "Builds trust within our user base." }
+    },
+    "cta": {
+      "title": "Join the AxisRide journey",
+      "subtitle": "Create an account and travel differently.",
+      "createAccount": "Create an account",
+      "viewJobs": "View openings"
+    }
+  },
+  "careers": {
+    "hero": {
+      "badge": "Careers",
+      "title1": "Build the future",
+      "title2": "together",
+      "subtitle": "Join an ambitious team transforming mobility in Africa."
+    },
+    "culture": {
+      "title": "Our culture",
+      "description": "A team driven by impact, innovation, and collaboration.",
+      "values": {
+        "impact": { "title": "Impact", "description": "Create meaningful social impact." },
+        "collaboration": { "title": "Collaboration", "description": "Work together, win together." },
+        "innovation": { "title": "Innovation", "description": "Always learn and improve." },
+        "diversity": { "title": "Diversity", "description": "A team that reflects Africa." }
+      }
+    },
+    "benefits": {
+      "title": "Benefits",
+      "subtitle": "A healthy environment to thrive.",
+      "health": { "title": "Health", "description": "Health and wellness coverage." },
+      "vacation": { "title": "Vacation", "description": "Flexible time off policy." },
+      "training": { "title": "Training", "description": "Annual learning budget." },
+      "remote": { "title": "Remote", "description": "Remote-friendly and flexible hours." },
+      "equity": { "title": "Equity", "description": "Share in our growth." },
+      "teamBuilding": { "title": "Team", "description": "Inclusive team culture." }
+    },
+    "jobs": {
+      "title": "Open roles",
+      "subtitle": "Apply in a few minutes.",
+      "fullStack": { "department": "Tech", "title": "Full Stack Developer", "description": "Build key features and scale the platform.", "location": "Dakar / Remote", "type": "Full-time" },
+      "productManager": { "department": "Product", "title": "Product Manager", "description": "Own product vision and roadmap.", "location": "Abidjan", "type": "Full-time" },
+      "growthMarketing": { "department": "Growth", "title": "Marketing Lead", "description": "Accelerate acquisition and retention.", "location": "Bamako", "type": "Full-time" },
+      "communityManager": { "department": "Community", "title": "Community Manager", "description": "Grow and support local communities.", "location": "Dakar", "type": "Full-time" },
+      "designer": { "department": "Design", "title": "Product Designer", "description": "Design a seamless user experience.", "location": "Remote", "type": "Full-time" },
+      "dataAnalyst": { "department": "Data", "title": "Data Analyst", "description": "Analyze performance and guide decisions.", "location": "Dakar", "type": "Full-time" }
+    },
+    "cta": {
+      "title": "Can’t find the right role?",
+      "subtitle": "Reach out—we’re always listening.",
+      "button": "Contact us"
+    }
+  },
+  "contact": {
+    "hero": {
+      "badge": "Contact",
+      "title": "Let’s talk about your next trip",
+      "subtitle": "Questions or suggestions? We respond quickly."
+    },
+    "info": {
+      "email": { "title": "Email", "value": "support@axisride.com", "description": "Reply within 24h" },
+      "phone": { "title": "Phone", "value": "+221 77 123 45 67", "description": "Mon-Fri 9am-6pm" },
+      "address": { "title": "Address", "value": "Dakar, Senegal", "description": "Plateau, Rue Carnot" },
+      "support": { "title": "Support", "value": "7 days/week", "description": "Fast assistance" }
+    },
+    "form": {
+      "title": "Send us a message",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "email@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+221 77 123 45 67",
+      "subject": "Subject",
+      "subjectPlaceholder": "Subject",
+      "message": "Message",
+      "messagePlaceholder": "Your message",
+      "submit": "Send",
+      "sending": "Sending...",
+      "success": "Thanks! Your message has been sent.",
+      "error": "Unable to send. Please try again."
+    },
+    "quickLinks": {
+      "title": "Quick links",
+      "helpCenter": { "title": "Help Center", "description": "Helpful articles and guides" },
+      "liveChat": { "title": "Live chat", "description": "Talk to an agent now" },
+      "partnerships": { "title": "Partnerships", "description": "Collaboration opportunities" }
+    },
+    "location": {
+      "title": "Our location",
+      "city": "Dakar, Senegal",
+      "address": "Plateau, Rue Carnot"
+    },
+    "social": {
+      "title": "Social media"
+    }
+  },
+  "privacy": {
+    "hero": { "badge": "Privacy", "title": "Privacy Policy" },
+    "intro": "We protect your personal data and comply with applicable laws.",
+    "toc": "Table of contents",
+    "relatedDocs": "Related documents",
+    "sections": {
+      "introduction": { "title": "Introduction", "content": "We respect your privacy and explain how your data is processed." },
+      "collection": { "title": "Data collection", "content": "We collect information needed for account creation and booking." },
+      "usage": { "title": "Use of data", "content": "Data is used for safety, support, and service improvement." },
+      "sharing": { "title": "Sharing", "content": "We only share necessary data with payment and security partners." },
+      "security": { "title": "Security", "content": "We implement technical and organizational measures to protect data." },
+      "retention": { "title": "Retention", "content": "Data is retained only as long as required for service purposes." },
+      "rights": { "title": "Your rights", "content": "You can access, correct, or delete your data at any time." },
+      "location": { "title": "Location data", "content": "Location data may be used to facilitate trips." },
+      "minors": { "title": "Minors", "content": "The service is intended for adults only." },
+      "international": { "title": "International transfers", "content": "Data may be processed in other countries with safeguards." },
+      "changes": { "title": "Changes", "content": "We may update this policy and notify users." },
+      "contact": { "title": "Contact", "content": "For questions, contact privacy@axisride.com." }
+    }
+  },
+  "terms": {
+    "hero": { "badge": "Terms", "title": "Terms of Service" },
+    "toc": "Table of contents",
+    "relatedDocs": "Related documents",
+    "sections": {
+      "acceptance": { "title": "Acceptance", "content": "By using AxisRide, you agree to these terms." },
+      "services": { "title": "Services", "content": "We connect drivers and passengers for shared trips." },
+      "registration": { "title": "Registration", "content": "You must provide accurate and up-to-date information." },
+      "driverObligations": { "title": "Driver obligations", "content": "Drivers must follow safety and punctuality rules." },
+      "passengerObligations": { "title": "Passenger obligations", "content": "Passengers must respect drivers and trip rules." },
+      "payments": { "title": "Payments", "content": "Payments are secure and processed by our partners." },
+      "cancellation": { "title": "Cancellation", "content": "Fees may apply for late cancellations." },
+      "liability": { "title": "Liability", "content": "AxisRide is not responsible for user actions." },
+      "dataProtection": { "title": "Data protection", "content": "We handle data in line with our privacy policy." },
+      "termination": { "title": "Termination", "content": "Accounts may be suspended for rule violations." },
+      "disputes": { "title": "Disputes", "content": "Contact support in case of disputes." },
+      "contact": { "title": "Contact", "content": "Contact legal@axisride.com for questions." }
+    }
+  },
+  "cookies": {
+    "hero": { "badge": "Cookies", "title": "Cookie Policy" },
+    "types": {
+      "title": "Cookie types",
+      "configurable": "Configurable",
+      "essential": {
+        "name": "Essential cookies",
+        "description": "Required for site operation.",
+        "required": "Required",
+        "examples": {
+          "0": "Authentication",
+          "1": "Security",
+          "2": "Session preferences"
+        }
+      },
+      "performance": {
+        "name": "Performance cookies",
+        "description": "Measure usage to improve experience.",
+        "examples": { "0": "Analytics", "1": "Visited pages" }
+      },
+      "functional": {
+        "name": "Functional cookies",
+        "description": "Personalize your experience.",
+        "examples": { "0": "Language", "1": "UI preferences" }
+      },
+      "advertising": {
+        "name": "Advertising cookies",
+        "description": "Provide relevant content.",
+        "examples": { "0": "Campaigns", "1": "Ad measurement" }
+      }
+    },
+    "examples": "Examples",
+    "toc": "Table of contents",
+    "relatedDocs": "Related documents",
+    "sections": {
+      "definition": { "title": "Definition", "content": "Cookies are small files stored on your device." },
+      "usage": { "title": "Usage", "content": "We use cookies for functionality and analytics." },
+      "management": { "title": "Management", "content": "You can manage preferences in your browser." },
+      "duration": { "title": "Duration", "content": "Some cookies expire at the end of a session." },
+      "thirdParty": { "title": "Third party", "content": "Third-party cookies may be used for analytics." },
+      "rights": { "title": "Rights", "content": "You can refuse or delete cookies." },
+      "changes": { "title": "Changes", "content": "This policy may be updated." },
+      "contact": { "title": "Contact", "content": "Contact privacy@axisride.com for questions." }
+    }
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Connection error",
+    "unauthorized": "Unauthorized",
+    "notFound": "Page not found",
+    "serverError": "Server error"
+  }
+}

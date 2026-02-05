@@ -1,0 +1,258 @@
+<div class="min-h-screen bg-background relative">
+  <div class="absolute inset-0 z-0">
+    <img 
+      src="https://images.unsplash.com/photo-1758061324477-a152aa3a7b0e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBlbGVjdHJpYyUyMGNhciUyMGNpdHklMjBzdHJlZXQlMjBhZnJpY2F8ZW58MHx8fHwxNzY5Nzk2NzkyfDA&ixlib=rb-4.1.0&q=85"
+      alt="Auth background"
+      class="w-full h-full object-cover opacity-10"
+    />
+    <div class="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background"></div>
+  </div>
+
+  <div class="absolute top-6 left-6 z-20">
+    <a routerLink="/" class="inline-flex items-center gap-2 rounded-full px-4 py-2 hover:bg-muted transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Accueil
+    </a>
+  </div>
+
+  <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-20">
+    <div class="w-full max-w-md">
+      <div class="flex items-center justify-center gap-2 mb-8">
+        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center animate-pulse-glow">
+          <svg class="w-7 h-7 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="text-2xl font-bold text-foreground font-heading">AxisRide</span>
+      </div>
+
+      <div *ngIf="isLoading" class="animate-pulse bg-card/70 border border-border/50 rounded-2xl p-8">
+        <div class="h-8 bg-muted rounded mb-4"></div>
+        <div class="h-4 bg-muted rounded mb-2"></div>
+        <div class="h-4 bg-muted rounded mb-2"></div>
+      </div>
+
+      <div *ngIf="!isLoading">
+        <div *ngIf="step === 'phone'" class="bg-card/80 backdrop-blur-lg border border-border/50 rounded-2xl p-6 sm:p-8 animate-scale-in">
+          <div class="text-center mb-6">
+            <h1 class="text-2xl font-heading font-semibold">
+              {{ mode === 'register' ? 'Créer un compte' : (mode === 'reset' ? 'Réinitialiser le mot de passe' : 'Se connecter') }}
+            </h1>
+            <p class="text-muted-foreground text-sm">
+              {{ mode === 'register' ? 'Rejoignez la communauté AxisRide' : (mode === 'reset' ? 'Recevez un lien de réinitialisation' : 'Connectez-vous avec votre numéro') }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 mb-6">
+            <button
+              type="button"
+              class="rounded-full px-4 py-2 text-sm font-medium border transition-colors"
+              [class.bg-primary]="mode === 'login'"
+              [class.text-primary-foreground]="mode === 'login'"
+              [class.border-primary]="mode === 'login'"
+              [class.border-border]="mode !== 'login'"
+              (click)="switchMode('login')"
+              data-testid="login-tab">
+              Connexion
+            </button>
+            <button
+              type="button"
+              class="rounded-full px-4 py-2 text-sm font-medium border transition-colors"
+              [class.bg-secondary]="mode === 'register'"
+              [class.text-secondary-foreground]="mode === 'register'"
+              [class.border-secondary]="mode === 'register'"
+              [class.border-border]="mode !== 'register'"
+              (click)="switchMode('register')"
+              data-testid="register-tab">
+              Inscription
+            </button>
+          </div>
+
+          <div *ngIf="mode === 'login'" class="space-y-5">
+            <form [formGroup]="loginForm" (ngSubmit)="handleLogin()" class="space-y-5">
+              <div class="space-y-2">
+                <label class="text-sm font-medium" for="login-phone">Numéro de téléphone</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">+</span>
+                  <input
+                    id="login-phone"
+                    type="tel"
+                    class="w-full h-12 rounded-xl border border-border bg-background pl-8 pr-3 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                    placeholder="221 77 123 45 67"
+                    formControlName="phone"
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="w-full rounded-full bg-primary hover:bg-primary/90 h-12 text-base font-semibold text-primary-foreground"
+                [disabled]="loading"
+                data-testid="login-submit-btn">
+                {{ loading ? 'Envoi...' : 'Recevoir le code OTP' }}
+              </button>
+            </form>
+          </div>
+
+          <div *ngIf="mode === 'register'" class="space-y-5">
+            <form [formGroup]="registerForm" (ngSubmit)="handleRegister()" class="space-y-5">
+              <div class="space-y-2">
+                <label class="text-sm font-medium" for="register-name">Nom complet</label>
+                <input
+                  id="register-name"
+                  type="text"
+                  class="w-full h-12 rounded-xl border border-border bg-background px-3 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  placeholder="Votre nom complet"
+                  formControlName="fullName"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium" for="register-phone">Numéro de téléphone</label>
+                <input
+                  id="register-phone"
+                  type="tel"
+                  class="w-full h-12 rounded-xl border border-border bg-background px-3 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  placeholder="221 77 123 45 67"
+                  formControlName="phone"
+                />
+              </div>
+              <div class="space-y-3">
+                <label class="text-sm font-medium">Je suis</label>
+                <div class="grid grid-cols-2 gap-4">
+                  <label class="flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all"
+                         [class.border-primary]="registerForm.value.role === 'passenger'"
+                         [class.bg-primary/5]="registerForm.value.role === 'passenger'">
+                    <input type="radio" class="sr-only" formControlName="role" value="passenger" />
+                    <span class="font-medium">Passager</span>
+                  </label>
+                  <label class="flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all"
+                         [class.border-primary]="registerForm.value.role === 'driver'"
+                         [class.bg-primary/5]="registerForm.value.role === 'driver'">
+                    <input type="radio" class="sr-only" formControlName="role" value="driver" />
+                    <span class="font-medium">Conducteur</span>
+                  </label>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="w-full rounded-full bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 text-base font-semibold"
+                [disabled]="loading"
+                data-testid="register-submit-btn">
+                {{ loading ? 'Création...' : 'Créer mon compte' }}
+              </button>
+            </form>
+          </div>
+
+          <div *ngIf="mode === 'reset'" class="space-y-5">
+            <form [formGroup]="resetForm" (ngSubmit)="handlePasswordReset()" class="space-y-5">
+              <div class="space-y-2">
+                <label class="text-sm font-medium" for="reset-id">Email ou téléphone</label>
+                <input
+                  id="reset-id"
+                  type="text"
+                  class="w-full h-12 rounded-xl border border-border bg-background px-3 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  placeholder="email@example.com"
+                  formControlName="emailOrPhone"
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full rounded-full bg-primary hover:bg-primary/90 h-12 text-base font-semibold text-primary-foreground"
+                [disabled]="loading">
+                {{ loading ? 'Envoi...' : 'Envoyer le lien' }}
+              </button>
+            </form>
+          </div>
+
+          <div class="mt-6 space-y-3">
+            <button
+              type="button"
+              class="w-full rounded-full border border-border h-11 text-sm font-medium hover:bg-muted"
+              (click)="handleSocialLogin('google')">
+              Continuer avec Google
+            </button>
+            <button
+              type="button"
+              class="w-full rounded-full border border-border h-11 text-sm font-medium hover:bg-muted"
+              (click)="handleSocialLogin('facebook')">
+              Continuer avec Facebook
+            </button>
+            <button
+              type="button"
+              class="w-full rounded-full border border-border h-11 text-sm font-medium hover:bg-muted"
+              (click)="handleSocialLogin('apple')">
+              Continuer avec Apple
+            </button>
+          </div>
+
+          <div class="mt-6 text-center text-sm">
+            <button type="button" class="text-primary hover:underline" (click)="switchMode('reset')">
+              Mot de passe oublié ?
+            </button>
+            <span class="mx-2 text-muted-foreground">•</span>
+            <button type="button" class="text-muted-foreground hover:text-foreground" (click)="switchMode('login')">
+              Retour à la connexion
+            </button>
+          </div>
+
+          <div *ngIf="message" class="mt-4 rounded-xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm text-primary">
+            {{ message }}
+          </div>
+          <div *ngIf="errorMessage" class="mt-4 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {{ errorMessage }}
+          </div>
+        </div>
+
+        <div *ngIf="step === 'otp'" class="bg-card/80 backdrop-blur-lg border border-border/50 rounded-2xl p-6 sm:p-8 animate-scale-in">
+          <div class="text-center mb-6">
+            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+              <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5 9 6.343 9 8s1.343 3 3 3zm0 0v6m-7 4h14"/>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-heading font-semibold">Vérification 2FA</h2>
+            <p class="text-muted-foreground text-sm">Entrez le code envoyé</p>
+          </div>
+
+          <div *ngIf="demoOtp" class="bg-accent/20 border border-accent/30 rounded-xl p-4 text-center mb-6">
+            <p class="text-sm text-muted-foreground mb-1">Code de démonstration:</p>
+            <p class="text-2xl font-mono font-bold tracking-widest">{{ demoOtp }}</p>
+          </div>
+
+          <form [formGroup]="otpForm" (ngSubmit)="handleVerifyOtp()" class="space-y-5">
+            <div class="space-y-2">
+              <label class="text-sm font-medium" for="otp">Code OTP</label>
+              <input
+                id="otp"
+                type="text"
+                maxlength="6"
+                class="w-full h-12 rounded-xl border border-border bg-background px-3 text-center tracking-[0.4em] focus:outline-none focus:ring-2 focus:ring-primary/40"
+                placeholder="000000"
+                formControlName="code"
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full rounded-full bg-primary hover:bg-primary/90 h-12 text-base font-semibold text-primary-foreground"
+              [disabled]="loading || otpForm.invalid"
+              data-testid="verify-otp-btn">
+              {{ loading ? 'Vérification...' : 'Vérifier et continuer' }}
+            </button>
+          </form>
+
+          <button
+            type="button"
+            class="w-full rounded-full mt-3 h-11 text-sm font-medium hover:bg-muted"
+            (click)="backToPhone()">
+            Modifier le numéro
+          </button>
+
+          <div *ngIf="errorMessage" class="mt-4 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {{ errorMessage }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

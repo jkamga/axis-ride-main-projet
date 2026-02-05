@@ -1,0 +1,120 @@
+<div class="min-h-screen bg-background">
+  <div class="h-16"></div>
+
+  <section class="pt-20 pb-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-6">
+        <span>💼</span>
+        {{ 'careers.hero.badge' | translate }}
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-6 font-heading">
+        {{ 'careers.hero.title1' | translate }} <span class="gradient-text">{{ 'careers.hero.title2' | translate }}</span>
+      </h1>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        {{ 'careers.hero.subtitle' | translate }}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 bg-muted/30">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-foreground mb-6 font-heading">{{ 'careers.culture.title' | translate }}</h2>
+          <p class="text-muted-foreground mb-8">
+            {{ 'careers.culture.description' | translate }}
+          </p>
+          <div class="grid grid-cols-2 gap-4">
+            <div *ngFor="let value of cultureValues" class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <span *ngIf="value.icon === 'heart'">❤️</span>
+                <span *ngIf="value.icon === 'users'">👥</span>
+                <span *ngIf="value.icon === 'zap'">⚡</span>
+                <span *ngIf="value.icon === 'globe'">🌍</span>
+              </div>
+              <div>
+                <div class="font-semibold text-foreground">{{ value.titleKey | translate }}</div>
+                <div class="text-sm text-muted-foreground">{{ value.descriptionKey | translate }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div class="h-40 rounded-2xl bg-primary/20"></div>
+            <div class="h-56 rounded-2xl bg-secondary/20"></div>
+          </div>
+          <div class="space-y-4 pt-8">
+            <div class="h-56 rounded-2xl bg-secondary/20"></div>
+            <div class="h-40 rounded-2xl bg-primary/20"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4 font-heading">{{ 'careers.benefits.title' | translate }}</h2>
+        <p class="text-muted-foreground">{{ 'careers.benefits.subtitle' | translate }}</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let benefit of benefits" class="bg-card border border-border/50 rounded-xl p-6 flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+            <span *ngIf="benefit.icon === 'heart'">❤️</span>
+            <span *ngIf="benefit.icon === 'plane'">✈️</span>
+            <span *ngIf="benefit.icon === 'graduation'">🎓</span>
+            <span *ngIf="benefit.icon === 'coffee'">☕</span>
+            <span *ngIf="benefit.icon === 'zap'">⚡</span>
+            <span *ngIf="benefit.icon === 'users'">👥</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-foreground mb-1">{{ benefit.titleKey | translate }}</h3>
+            <p class="text-sm text-muted-foreground">{{ benefit.descriptionKey | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4 bg-muted/30">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4 font-heading">{{ 'careers.jobs.title' | translate }}</h2>
+        <p class="text-muted-foreground">{{ 'careers.jobs.subtitle' | translate }}</p>
+      </div>
+
+      <div class="space-y-4">
+        <div *ngFor="let job of jobs" class="bg-card border border-border/50 rounded-xl p-6 card-hover">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="text-sm text-primary font-medium mb-1">{{ job.departmentKey | translate }}</div>
+              <h3 class="text-xl font-semibold text-foreground mb-2 font-heading">{{ job.titleKey | translate }}</h3>
+              <p class="text-muted-foreground text-sm mb-3">{{ job.descriptionKey | translate }}</p>
+              <div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                <div class="flex items-center gap-1">📍 {{ job.locationKey | translate }}</div>
+                <div class="flex items-center gap-1">🕒 {{ job.typeKey | translate }}</div>
+              </div>
+            </div>
+            <button class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 shrink-0">
+              {{ 'common.apply' | translate }} →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-foreground mb-6 font-heading">{{ 'careers.cta.title' | translate }}</h2>
+      <p class="text-muted-foreground mb-8">{{ 'careers.cta.subtitle' | translate }}</p>
+      <a routerLink="/contact" class="rounded-full bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-4 font-semibold inline-flex items-center gap-2">
+        {{ 'careers.cta.button' | translate }}
+        <span>→</span>
+      </a>
+    </div>
+  </section>
+</div>
