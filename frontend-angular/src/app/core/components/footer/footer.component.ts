@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule],
-  template: '<footer class="footer"><p>© 2024 AxisRide - Tous droits réservés</p></footer>',
-  styles: ['.footer { background: #2c3e50; color: white; padding: 20px; text-align: center; margin-top: auto; }']
+  imports: [CommonModule, TranslateModule],
+  templateUrl: './footer.component.html'
 })
-export class FooterComponent {}
+export class FooterComponent {
+  currentYear = new Date().getFullYear();
+}

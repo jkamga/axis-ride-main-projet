@@ -1,66 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '../../../components/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
-    <header class="header">
-      <div class="brand">
-        <a routerLink="/" class="brand-link">AxisRide</a>
-      </div>
-      <nav class="nav">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
-        <a routerLink="/pricing" routerLinkActive="active">Tarifs</a>
-        <a routerLink="/about" routerLinkActive="active">À propos</a>
-        <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      </nav>
-      <div class="actions">
-        <a class="btn" routerLink="/auth">Se connecter</a>
-      </div>
-    </header>
-  `,
-  styles: [`
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      background: #ffffff;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .brand-link {
-      font-weight: 700;
-      font-size: 20px;
-      text-decoration: none;
-      color: #0f172a;
-    }
-    .nav {
-      display: flex;
-      gap: 16px;
-    }
-    .nav a {
-      text-decoration: none;
-      color: #334155;
-      font-weight: 500;
-    }
-    .nav a.active {
-      color: #2563eb;
-    }
-    .actions .btn {
-      display: inline-block;
-      padding: 8px 14px;
-      background: #2563eb;
-      color: #fff;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-    }
-  `]
+  imports: [CommonModule, RouterModule, TranslateModule, LanguageSwitcherComponent],
+  templateUrl: './header.component.html'
 })
-export class HeaderComponent {}
+export class HeaderComponent implements OnInit {
+  mobileMenuOpen = false;
+  isAuthenticated = false;
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.isAuthenticated = !!localStorage.getItem('access_token');
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  navigateTo(route: string, queryParams?: any): void {
+    this.router.navigate([route], { queryParams });
+    this.mobileMenuOpen = false;
+  }
+
+  scrollToSection(sectionId: string): void {
+    if (this.router.url === '/' || this.router.url.startsWith('/#')) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      this.mobileMenuOpen = false;
+      return;
+    }
+
+    this.router.navigate(['/'], { fragment: sectionId }).then(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      this.mobileMenuOpen = false;
+    });
+  }
+}
