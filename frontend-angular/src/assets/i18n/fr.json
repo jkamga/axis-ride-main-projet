@@ -233,6 +233,39 @@
       "bookingSuccess": "Réservation confirmée !"
     }
   },
+  "trips": {
+    "search": {
+      "title": "Trouvez Votre Trajet Idéal",
+      "subtitle": "Recherchez parmi des milliers de trajets à travers l'Afrique",
+      "button": "Rechercher des trajets",
+      "popular": "Routes populaires"
+    },
+    "results": {
+      "found": "trajets trouvés",
+      "noResults": "Aucun trajet trouvé",
+      "tryDifferent": "Essayez d'ajuster vos critères de recherche",
+      "seatsLeft": "places restantes"
+    },
+    "filters": {
+      "maxPrice": "Prix maximum",
+      "time": "Heure de départ",
+      "anytime": "N'importe quand",
+      "morning": "Matin (6h-12h)",
+      "afternoon": "Après-midi (12h-18h)",
+      "evening": "Soir (18h-6h)",
+      "apply": "Appliquer les filtres"
+    },
+    "sort": {
+      "price": "Prix (croissant)",
+      "time": "Heure de départ",
+      "rating": "Note du conducteur"
+    },
+    "preferences": {
+      "noSmoking": "Non-fumeur",
+      "music": "Musique autorisée",
+      "pets": "Animaux autorisés"
+    }
+  },
   "profile": {
     "title": "Mon Profil",
     "personalInfo": "Informations personnelles",

@@ -1,0 +1,50 @@
+.card-hover {
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: hsl(var(--muted));
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    border: none;
+  }
+}

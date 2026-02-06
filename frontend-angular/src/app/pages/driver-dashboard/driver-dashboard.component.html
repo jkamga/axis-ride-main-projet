@@ -1,36 +1,277 @@
-<!-- Driver Dashboard -->
 <div class="min-h-screen bg-background">
-  <!-- Navigation placeholder -->
-  <div class="h-16"></div>
-
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold font-heading mb-8">Driver Dashboard</h1>
-    
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="animate-pulse">
-      <div class="h-8 bg-muted rounded mb-4 w-1/2"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-3/4"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-2/3"></div>
-    </div>
-
-    <!-- Main Content -->
-    <div *ngIf="!isLoading">
-      <div class="bg-card rounded-xl p-8 border border-border">
-        <p class="text-muted-foreground mb-4">
-          Cette page est en cours de conversion depuis React (DriverDashboard.jsx).
-        </p>
-        
-        <div class="space-y-4">
-          <h2 class="text-2xl font-semibold font-heading">Fonctionnalités à implémenter:</h2>
-          <ul class="list-disc list-inside space-y-2">
-            <li class="text-muted-foreground">Stats</li>
-            <li class="text-muted-foreground">Earnings</li>
-            <li class="text-muted-foreground">Trip Management</li>
-            <li class="text-muted-foreground">Reviews</li>
-          </ul>
+  <!-- Hero Section -->
+  <section class="bg-primary pt-24 pb-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-bold text-primary-foreground mb-2 font-['Outfit']">
+            {{ 'dashboard.welcome' | translate }}, {{ userName }}!
+          </h1>
+          <p class="text-primary-foreground/80">
+            {{ 'dashboard.driver.title' | translate }}
+          </p>
         </div>
+        <button
+          (click)="createTrip()"
+          class="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-colors flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          {{ 'dashboard.driver.createTrip' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid md:grid-cols-4 gap-6 mb-8">
+      <div *ngFor="let i of [1,2,3,4]" class="bg-card border border-border rounded-xl p-6 animate-pulse">
+        <div class="h-4 bg-muted rounded w-1/2 mb-4"></div>
+        <div class="h-8 bg-muted rounded w-3/4"></div>
       </div>
     </div>
   </div>
+
+  <!-- Dashboard Content -->
+  <section *ngIf="!isLoading" class="py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Stats Cards -->
+      <div class="grid md:grid-cols-4 gap-6 mb-8">
+        <!-- Total Trips -->
+        <div class="bg-card border border-border rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-muted-foreground mb-1">{{ 'dashboard.driver.stats.totalTrips' | translate }}</p>
+          <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.totalTrips }}</p>
+        </div>
+
+        <!-- Total Earnings -->
+        <div class="bg-card border border-border rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center">
+              <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-muted-foreground mb-1">{{ 'dashboard.driver.stats.totalEarnings' | translate }}</p>
+          <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.totalEarnings }} <span class="text-base">FCFA</span></p>
+        </div>
+
+        <!-- Rating -->
+        <div class="bg-card border border-border rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
+              <svg class="w-6 h-6 text-secondary" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-muted-foreground mb-1">{{ 'dashboard.driver.stats.rating' | translate }}</p>
+          <div class="flex items-center gap-2">
+            <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.rating }}</p>
+            <div class="flex items-center gap-1">
+              <svg
+                *ngFor="let star of getStarArray(stats.rating)"
+                class="w-4 h-4"
+                [class.text-secondary]="star === 1"
+                [class.text-muted]="star === 0"
+                fill="currentColor"
+                viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Passengers -->
+        <div class="bg-card border border-border rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+          </div>
+          <p class="text-sm text-muted-foreground mb-1">{{ 'dashboard.driver.stats.passengers' | translate }}</p>
+          <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.totalPassengers }}</p>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Left Column: Active Trips -->
+        <div class="lg:col-span-2">
+          <!-- Active Trips Section -->
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-bold text-foreground font-['Outfit']">
+                {{ 'dashboard.driver.activeTrips' | translate }}
+              </h2>
+            </div>
+
+            <!-- Active Trip Cards -->
+            <div *ngIf="activeTrips.length > 0" class="space-y-4">
+              <div
+                *ngFor="let trip of activeTrips"
+                class="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                  <span [class]="getStatusColor(trip.status) + ' text-xs px-3 py-1 rounded-full font-medium'">
+                    {{ 'trip.status.' + trip.status | translate }}
+                  </span>
+                  <p class="text-sm text-muted-foreground">{{ trip.date }}</p>
+                </div>
+
+                <div class="flex items-center gap-4 mb-4">
+                  <div>
+                    <p class="text-2xl font-bold text-foreground font-['Outfit']">{{ trip.departure }}</p>
+                    <p class="text-sm text-muted-foreground">{{ trip.time }}</p>
+                  </div>
+                  <div class="flex-1 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-2xl font-bold text-foreground font-['Outfit']">{{ trip.destination }}</p>
+                  </div>
+                </div>
+
+                <!-- Booking Progress -->
+                <div class="mb-4">
+                  <div class="flex justify-between text-sm mb-2">
+                    <span class="text-muted-foreground">{{ 'trip.details.availableSeats' | translate }}</span>
+                    <span class="text-foreground font-medium">{{ trip.bookedSeats }}/{{ trip.bookedSeats + trip.availableSeats }}</span>
+                  </div>
+                  <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-primary rounded-full transition-all duration-300"
+                      [style.width.%]="getProgressPercentage(trip)"></div>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-border">
+                  <div class="text-sm text-muted-foreground">
+                    {{ 'dashboard.driver.earnings' | translate }}
+                  </div>
+                  <div class="text-right">
+                    <p class="text-2xl font-bold text-primary font-['Outfit']">{{ trip.earnings }}</p>
+                    <p class="text-xs text-muted-foreground">FCFA</p>
+                  </div>
+                </div>
+
+                <button
+                  (click)="viewTrip(trip.id)"
+                  class="mt-4 w-full px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors">
+                  {{ 'trip.details.title' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="activeTrips.length === 0" class="bg-card border border-border rounded-xl p-12 text-center">
+              <svg class="w-16 h-16 text-muted-foreground mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <h3 class="text-lg font-semibold text-foreground mb-2">{{ 'dashboard.passenger.noTrips' | translate }}</h3>
+              <p class="text-muted-foreground mb-4">{{ 'trips.results.tryDifferent' | translate }}</p>
+              <button
+                (click)="createTrip()"
+                class="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+                {{ 'dashboard.driver.createTrip' | translate }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Completed Trips Section -->
+          <div>
+            <h2 class="text-2xl font-bold text-foreground mb-6 font-['Outfit']">
+              {{ 'dashboard.passenger.recentTrips' | translate }}
+            </h2>
+
+            <div *ngIf="completedTrips.length > 0" class="bg-card border border-border rounded-xl overflow-hidden">
+              <div
+                *ngFor="let trip of completedTrips; let last = last"
+                class="p-6 hover:bg-muted/50 transition-colors cursor-pointer"
+                [class.border-b]="!last"
+                [class.border-border]="!last"
+                (click)="viewTrip(trip.id)">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                      <span [class]="getStatusColor(trip.status) + ' text-xs px-3 py-1 rounded-full font-medium'">
+                        {{ 'trip.status.' + trip.status | translate }}
+                      </span>
+                      <p class="text-sm text-muted-foreground">{{ trip.date }}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <p class="font-semibold text-foreground">{{ trip.departure }}</p>
+                      <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                      <p class="font-semibold text-foreground">{{ trip.destination }}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-4">
+                    <div class="text-sm text-muted-foreground">
+                      {{ trip.bookedSeats }} {{ 'trip.seats' | translate }}
+                    </div>
+                    <p class="text-lg font-bold text-primary font-['Outfit']">{{ trip.earnings }} FCFA</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Earnings -->
+        <div>
+          <div class="bg-card border border-border rounded-xl p-6 sticky top-24">
+            <h3 class="text-xl font-bold text-foreground mb-6 font-['Outfit']">
+              {{ 'dashboard.driver.earnings' | translate }}
+            </h3>
+
+            <!-- Monthly Earnings -->
+            <div class="space-y-4">
+              <div *ngFor="let earning of monthlyEarnings" class="pb-4 border-b border-border last:border-0 last:pb-0">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm font-medium text-foreground">{{ earning.month }}</span>
+                  <span class="text-sm text-muted-foreground">{{ earning.trips }} {{ 'nav.trips' | translate }}</span>
+                </div>
+                <p class="text-2xl font-bold text-primary font-['Outfit']">{{ earning.amount }} <span class="text-sm">FCFA</span></p>
+              </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="mt-6 pt-6 border-t border-border">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-muted-foreground">{{ 'dashboard.driver.stats.totalEarnings' | translate }}</span>
+                <span class="text-lg font-bold text-foreground font-['Outfit']">{{ stats.totalEarnings }} FCFA</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted-foreground">{{ 'dashboard.driver.stats.rating' | translate }}</span>
+                <div class="flex items-center gap-1">
+                  <span class="text-lg font-bold text-foreground font-['Outfit']">{{ stats.rating }}</span>
+                  <svg class="w-4 h-4 text-secondary" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

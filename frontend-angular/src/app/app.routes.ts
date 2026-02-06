@@ -26,6 +26,10 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'trips',
+    loadComponent: () => import('./pages/trips/trip-search.component').then(m => m.TripSearchComponent)
+  },
+  {
     path: 'trips/:id',
     loadComponent: () => import('./pages/trip-details/trip-details.component').then(m => m.TripDetailsComponent)
   },

@@ -233,6 +233,39 @@
       "bookingSuccess": "Booking confirmed!"
     }
   },
+  "trips": {
+    "search": {
+      "title": "Find Your Perfect Ride",
+      "subtitle": "Search thousands of trips across Africa",
+      "button": "Search Trips",
+      "popular": "Popular routes"
+    },
+    "results": {
+      "found": "trips found",
+      "noResults": "No trips found",
+      "tryDifferent": "Try adjusting your search criteria",
+      "seatsLeft": "seats left"
+    },
+    "filters": {
+      "maxPrice": "Maximum price",
+      "time": "Departure time",
+      "anytime": "Anytime",
+      "morning": "Morning (6am-12pm)",
+      "afternoon": "Afternoon (12pm-6pm)",
+      "evening": "Evening (6pm-6am)",
+      "apply": "Apply filters"
+    },
+    "sort": {
+      "price": "Price (low to high)",
+      "time": "Departure time",
+      "rating": "Driver rating"
+    },
+    "preferences": {
+      "noSmoking": "No smoking",
+      "music": "Music allowed",
+      "pets": "Pets allowed"
+    }
+  },
   "profile": {
     "title": "My Profile",
     "personalInfo": "Personal information",
