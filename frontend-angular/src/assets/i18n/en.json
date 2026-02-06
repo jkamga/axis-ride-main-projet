@@ -31,7 +31,18 @@
     "apply": "Apply",
     "privacy": "Privacy",
     "terms": "Terms",
-    "cookies": "Cookies"
+    "cookies": "Cookies",
+    "tagline": "Africa's trusted carpooling platform",
+    "product": "Product",
+    "pricing": "Pricing",
+    "mobileApp": "Mobile App",
+    "company": "Company",
+    "about": "About",
+    "careers": "Careers",
+    "contact": "Contact",
+    "legal": "Legal",
+    "copyright": "© 2025 AxisRide. All rights reserved.",
+    "freeAccount": "Create free account"
   },
   "nav": {
     "home": "Home",

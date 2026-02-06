@@ -49,18 +49,18 @@ export class LandingComponent implements OnInit {
   howItWorks = [
     {
       step: '01',
-      titleKey: 'landing.howItWorks.step1.title',
-      descriptionKey: 'landing.howItWorks.step1.description'
+      titleKey: 'landing.howItWorks.search.title',
+      descriptionKey: 'landing.howItWorks.search.description'
     },
     {
       step: '02',
-      titleKey: 'landing.howItWorks.step2.title',
-      descriptionKey: 'landing.howItWorks.step2.description'
+      titleKey: 'landing.howItWorks.book.title',
+      descriptionKey: 'landing.howItWorks.book.description'
     },
     {
       step: '03',
-      titleKey: 'landing.howItWorks.step3.title',
-      descriptionKey: 'landing.howItWorks.step3.description'
+      titleKey: 'landing.howItWorks.travel.title',
+      descriptionKey: 'landing.howItWorks.travel.description'
     }
   ];
 
