@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '../../components/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, RouterModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit {
+  readonly LanguageSwitcherComponent = LanguageSwitcherComponent;
   mobileMenuOpen = false;
   isAuthenticated = false;
-  currentYear = new Date().getFullYear();
 
   features = [
     {
@@ -47,52 +48,24 @@ export class LandingComponent implements OnInit {
 
   howItWorks = [
     {
-      step: '1',
-      titleKey: 'landing.howItWorks.search.title',
-      descriptionKey: 'landing.howItWorks.search.description',
-      icon: 'map-pin'
+      step: '01',
+      titleKey: 'landing.howItWorks.step1.title',
+      descriptionKey: 'landing.howItWorks.step1.description'
     },
     {
-      step: '2',
-      titleKey: 'landing.howItWorks.book.title',
-      descriptionKey: 'landing.howItWorks.book.description',
-      icon: 'calendar'
+      step: '02',
+      titleKey: 'landing.howItWorks.step2.title',
+      descriptionKey: 'landing.howItWorks.step2.description'
     },
     {
-      step: '3',
-      titleKey: 'landing.howItWorks.travel.title',
-      descriptionKey: 'landing.howItWorks.travel.description',
-      icon: 'car'
-    }
-  ];
-
-  testimonials = [
-    {
-      name: 'Marie D.',
-      role: 'Passagère régulière',
-      content: 'AxisRide a transformé mes trajets quotidiens. Je fais des économies et je rencontre des personnes formidables !',
-      rating: 5,
-      image: 'https://i.pravatar.cc/150?img=1'
-    },
-    {
-      name: 'Jean K.',
-      role: 'Conducteur',
-      content: 'Excellent moyen de rentabiliser mes trajets. L\'application est intuitive et le paiement sécurisé.',
-      rating: 5,
-      image: 'https://i.pravatar.cc/150?img=12'
-    },
-    {
-      name: 'Sophie L.',
-      role: 'Étudiante',
-      content: 'Parfait pour mes déplacements entre la ville et mon campus. Économique et écologique !',
-      rating: 5,
-      image: 'https://i.pravatar.cc/150?img=5'
+      step: '03',
+      titleKey: 'landing.howItWorks.step3.title',
+      descriptionKey: 'landing.howItWorks.step3.description'
     }
   ];
 
   constructor(
-    private router: Router,
-    private translate: TranslateService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +89,4 @@ export class LandingComponent implements OnInit {
     this.mobileMenuOpen = false;
   }
 
-  getStarArray(rating: number): number[] {
-    return Array(rating).fill(0);
-  }
 }

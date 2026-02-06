@@ -7,10 +7,11 @@ import { LanguageSwitcherComponent } from '../../../components/language-switcher
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit {
+  readonly LanguageSwitcherComponent = LanguageSwitcherComponent;
   mobileMenuOpen = false;
   isAuthenticated = false;
 
