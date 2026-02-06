@@ -37,16 +37,27 @@ src/
 │   │   └── components/
 │   │       ├── header/
 │   │       └── footer/
-│   ├── features/            # Features de l'application
-│   │   ├── home/           # Page d'accueil
+│   ├── pages/               # Pages de l'application
+│   │   ├── landing/        # Page d'accueil
 │   │   ├── dashboard/      # Dashboard utilisateur
-│   │   ├── trips/          # Gestion des trajets
-│   │   └── profile/        # Profil utilisateur
+│   │   ├── trips/          # Recherche de trajets
+│   │   ├── trip-details/   # Détails d'un trajet
+│   │   ├── profile/        # Profil utilisateur
+│   │   ├── pricing/        # Plans et tarification
+│   │   ├── subscription/   # Gestion abonnement
+│   │   ├── groups/         # Groupes communautaires
+│   │   ├── admin-dashboard/# Dashboard administrateur
+│   │   ├── about/          # À propos
+│   │   ├── contact/        # Contact
+│   │   ├── careers/        # Carrières
+│   │   └── legal/          # Pages légales
 │   ├── shared/             # Composants partagés
 │   ├── app.component.ts    # Composant racine
 │   ├── app.config.ts       # Configuration app
 │   └── app.routes.ts       # Routes
 └── environments/           # Configuration environnement
+    └── assets/
+        └── i18n/           # Fichiers de traduction (en, fr)
 ```
 
 ## 🔐 Authentification
@@ -68,8 +79,10 @@ L'application supporte deux modes d'authentification :
 - **Angular 17** - Framework
 - **TypeScript 5.2** - Langage
 - **angular-oauth2-oidc** - Intégration OIDC
+- **@ngx-translate/core** - Internationalisation (i18n)
 - **RxJS** - Programmation réactive
 - **Standalone Components** - Approche moderne Angular
+- **Tailwind CSS** - Styling utilitaire
 
 ## 📝 Configuration
 
@@ -113,12 +126,34 @@ npm run lint
 
 ## 🌐 API Endpoints Utilisés
 
+### Authentification
 - `POST /api/auth/register` - Inscription
 - `POST /api/auth/login` - Connexion
 - `POST /api/auth/refresh` - Refresh token
+
+### Trajets
 - `GET /api/trips` - Liste des trajets
 - `POST /api/trips` - Créer un trajet
+- `GET /api/trips/:id` - Détails d'un trajet
+- `POST /api/trips/:id/book` - Réserver un trajet
+
+### Profil
 - `GET /api/profile` - Profil utilisateur
+- `PUT /api/profile` - Mettre à jour le profil
+
+### Abonnements
+- `GET /api/subscriptions` - Détails de l'abonnement
+- `POST /api/subscriptions` - Créer un abonnement
+- `PUT /api/subscriptions` - Modifier un abonnement
+- `DELETE /api/subscriptions` - Annuler un abonnement
+- `GET /api/subscriptions/invoices` - Historique de facturation
+
+### Groupes
+- `GET /api/groups` - Liste des groupes
+- `POST /api/groups` - Créer un groupe
+- `GET /api/groups/:id` - Détails d'un groupe
+- `POST /api/groups/:id/join` - Rejoindre un groupe
+- `POST /api/groups/:id/leave` - Quitter un groupe
 
 ## 🔒 Guards
 
@@ -146,6 +181,24 @@ npm run lint
 - Liste des trajets
 - Recherche et filtres
 - Création de trajet
+
+### PricingComponent
+- Plans d'abonnement (Gratuit, Basic, Premium, Enterprise)
+- Basculement mensuel/annuel
+- Tableau de comparaison des fonctionnalités
+- FAQ intégrée
+
+### SubscriptionComponent
+- Gestion d'abonnement actif
+- Historique de facturation
+- Gestion des moyens de paiement
+- Renouvellement automatique
+
+### GroupsComponent
+- Découverte de groupes communautaires
+- Création de groupes (publics/privés)
+- Recherche et filtres par catégorie
+- Gestion des adhésions
 
 ## 🎨 Styling
 

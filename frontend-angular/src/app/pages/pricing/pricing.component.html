@@ -1,35 +1,233 @@
-<!-- Pricing -->
 <div class="min-h-screen bg-background">
-  <!-- Navigation placeholder -->
-  <div class="h-16"></div>
+  <!-- Hero Section -->
+  <section class="bg-primary pt-24 pb-12 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-primary-foreground mb-4 font-['Outfit']">
+        {{ 'pricing.title' | translate }}
+      </h1>
+      <p class="text-xl text-primary-foreground/80 mb-8">
+        {{ 'pricing.subtitle' | translate }}
+      </p>
 
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold font-heading mb-8">Pricing</h1>
-    
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="animate-pulse">
-      <div class="h-8 bg-muted rounded mb-4 w-1/2"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-3/4"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-2/3"></div>
+      <!-- Billing Toggle -->
+      <div class="inline-flex items-center gap-4 bg-primary-foreground/10 backdrop-blur-sm rounded-full p-2">
+        <button
+          (click)="toggleBilling()"
+          [class.bg-primary-foreground]="billingCycle === 'monthly'"
+          [class.text-primary]="billingCycle === 'monthly'"
+          [class.text-primary-foreground]="billingCycle !== 'monthly'"
+          class="px-6 py-2 rounded-full transition-colors font-medium">
+          {{ 'pricing.billing.monthly' | translate }}
+        </button>
+        <button
+          (click)="toggleBilling()"
+          [class.bg-primary-foreground]="billingCycle === 'yearly'"
+          [class.text-primary]="billingCycle === 'yearly'"
+          [class.text-primary-foreground]="billingCycle !== 'yearly'"
+          class="px-6 py-2 rounded-full transition-colors font-medium">
+          {{ 'pricing.billing.yearly' | translate }}
+          <span class="ml-2 text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
+            {{ 'pricing.billing.save20' | translate }}
+          </span>
+        </button>
+      </div>
     </div>
+  </section>
 
-    <!-- Main Content -->
-    <div *ngIf="!isLoading">
-      <div class="bg-card rounded-xl p-8 border border-border">
-        <p class="text-muted-foreground mb-4">
-          Cette page est en cours de conversion depuis React (PricingPage.jsx).
-        </p>
-        
-        <div class="space-y-4">
-          <h2 class="text-2xl font-semibold font-heading">Fonctionnalités à implémenter:</h2>
-          <ul class="list-disc list-inside space-y-2">
-            <li class="text-muted-foreground">Plans</li>
-            <li class="text-muted-foreground">Features Comparison</li>
-            <li class="text-muted-foreground">FAQ</li>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+      <div *ngFor="let i of [1,2,3,4]" class="bg-card border border-border rounded-xl p-6 h-96"></div>
+    </div>
+  </div>
+
+  <!-- Pricing Cards -->
+  <section *ngIf="!isLoading" class="py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          *ngFor="let plan of plans"
+          [class.ring-2]="plan.highlighted"
+          [class.ring-primary]="plan.highlighted"
+          [class.scale-105]="plan.highlighted"
+          class="bg-card border border-border rounded-xl p-6 hover:shadow-xl transition-all relative">
+
+          <!-- Popular Badge -->
+          <div *ngIf="plan.popular" class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+            <span class="bg-secondary text-secondary-foreground px-4 py-1 rounded-full text-xs font-semibold">
+              {{ 'pricing.popular' | translate }}
+            </span>
+          </div>
+
+          <div class="mb-4">
+            <h3 class="text-2xl font-bold text-foreground mb-2 font-['Outfit']">
+              {{ plan.name | translate }}
+            </h3>
+            <p class="text-sm text-muted-foreground">
+              {{ plan.description | translate }}
+            </p>
+          </div>
+
+          <div class="mb-6">
+            <div class="flex items-baseline gap-2">
+              <span class="text-4xl font-bold text-foreground font-['Outfit']">
+                {{ plan.price > 0 ? plan.price : '' }}
+              </span>
+              <span *ngIf="plan.price > 0" class="text-muted-foreground">FCFA</span>
+              <span *ngIf="plan.price === 0 && plan.id === 'free'" class="text-2xl font-bold text-foreground">
+                {{ 'pricing.plans.free.price' | translate }}
+              </span>
+              <span *ngIf="plan.period" class="text-sm text-muted-foreground">
+                / {{ plan.period | translate }}
+              </span>
+              <span *ngIf="plan.id === 'enterprise'" class="text-2xl font-bold text-foreground">
+                {{ 'pricing.plans.enterprise.price' | translate }}
+              </span>
+            </div>
+          </div>
+
+          <ul class="space-y-3 mb-6">
+            <li *ngFor="let feature of plan.features" class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-sm text-foreground">{{ feature | translate }}</span>
+            </li>
           </ul>
+
+          <button
+            (click)="selectPlan(plan.id)"
+            [class.bg-primary]="plan.highlighted"
+            [class.text-primary-foreground]="plan.highlighted"
+            [class.hover:bg-primary/90]="plan.highlighted"
+            [class.border]="!plan.highlighted"
+            [class.border-border]="!plan.highlighted"
+            [class.hover:bg-muted]="!plan.highlighted"
+            class="w-full px-6 py-3 rounded-lg font-semibold transition-colors">
+            {{ plan.buttonText | translate }}
+          </button>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Feature Comparison -->
+  <section *ngIf="!isLoading" class="py-12 px-4 bg-muted/30">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-foreground mb-12 font-['Outfit']">
+        {{ 'pricing.comparison.title' | translate }}
+      </h2>
+
+      <div class="bg-card border border-border rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-muted">
+              <tr>
+                <th class="px-6 py-4 text-left text-sm font-medium text-muted-foreground uppercase">
+                  {{ 'pricing.comparison.feature' | translate }}
+                </th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-muted-foreground uppercase">
+                  {{ 'pricing.plans.free.name' | translate }}
+                </th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-muted-foreground uppercase">
+                  {{ 'pricing.plans.basic.name' | translate }}
+                </th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-muted-foreground uppercase bg-primary/10">
+                  {{ 'pricing.plans.premium.name' | translate }}
+                </th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-muted-foreground uppercase">
+                  {{ 'pricing.plans.enterprise.name' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr *ngFor="let feature of features" class="hover:bg-muted/50 transition-colors">
+                <td class="px-6 py-4 text-sm text-foreground">
+                  {{ feature.name | translate }}
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <svg *ngIf="getFeatureValue(feature, 'free')" class="w-5 h-5 text-primary mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <svg *ngIf="!getFeatureValue(feature, 'free')" class="w-5 h-5 text-muted-foreground mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <svg *ngIf="getFeatureValue(feature, 'basic')" class="w-5 h-5 text-primary mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <svg *ngIf="!getFeatureValue(feature, 'basic')" class="w-5 h-5 text-muted-foreground mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </td>
+                <td class="px-6 py-4 text-center bg-primary/5">
+                  <svg *ngIf="getFeatureValue(feature, 'premium')" class="w-5 h-5 text-primary mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <svg *ngIf="!getFeatureValue(feature, 'premium')" class="w-5 h-5 text-muted-foreground mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <svg *ngIf="getFeatureValue(feature, 'enterprise')" class="w-5 h-5 text-primary mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <svg *ngIf="!getFeatureValue(feature, 'enterprise')" class="w-5 h-5 text-muted-foreground mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section *ngIf="!isLoading" class="py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-foreground mb-12 font-['Outfit']">
+        {{ 'pricing.faq.title' | translate }}
+      </h2>
+
+      <div class="space-y-4">
+        <div *ngFor="let faq of faqs; let i = index" class="bg-card border border-border rounded-xl overflow-hidden">
+          <button
+            (click)="toggleFaq(i)"
+            class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition-colors">
+            <span class="font-semibold text-foreground">{{ faq.question | translate }}</span>
+            <svg
+              [class.transform]="faq.open"
+              [class.rotate-180]="faq.open"
+              class="w-5 h-5 text-muted-foreground transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div *ngIf="faq.open" class="px-6 pb-4">
+            <p class="text-muted-foreground">{{ faq.answer | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 px-4 bg-primary">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-primary-foreground mb-4 font-['Outfit']">
+        {{ 'pricing.cta.title' | translate }}
+      </h2>
+      <p class="text-xl text-primary-foreground/80 mb-8">
+        {{ 'pricing.cta.subtitle' | translate }}
+      </p>
+      <button routerLink="/contact" class="px-8 py-4 bg-primary-foreground text-primary rounded-lg font-semibold hover:bg-primary-foreground/90 transition-colors">
+        {{ 'pricing.cta.button' | translate }}
+      </button>
+    </div>
+  </section>
 </div>

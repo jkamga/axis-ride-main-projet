@@ -1,34 +1,439 @@
-<!-- Groups -->
-<div class="min-h-screen bg-background">
-  <!-- Navigation placeholder -->
-  <div class="h-16"></div>
+<div class="min-h-screen bg-background py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <!-- Hero Section -->
+    <div class="mb-12 text-center">
+      <h1 class="text-5xl font-bold text-foreground mb-4">{{ 'groups.title' | translate }}</h1>
+      <p class="text-xl text-muted-foreground mb-8">{{ 'groups.subtitle' | translate }}</p>
+      <button
+        (click)="openCreateModal()"
+        class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg">
+        {{ 'groups.createGroup' | translate }}
+      </button>
+    </div>
 
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold font-heading mb-8">Groups</h1>
-    
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="animate-pulse">
-      <div class="h-8 bg-muted rounded mb-4 w-1/2"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-3/4"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-2/3"></div>
+    <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="glass rounded-lg p-6 animate-pulse">
+        <div class="h-8 bg-muted rounded w-3/4 mb-4"></div>
+        <div class="h-4 bg-muted rounded w-full mb-2"></div>
+        <div class="h-4 bg-muted rounded w-5/6"></div>
+      </div>
     </div>
 
     <!-- Main Content -->
-    <div *ngIf="!isLoading">
-      <div class="bg-card rounded-xl p-8 border border-border">
-        <p class="text-muted-foreground mb-4">
-          Cette page est en cours de conversion depuis React (GroupsPage.jsx).
-        </p>
-        
-        <div class="space-y-4">
-          <h2 class="text-2xl font-semibold font-heading">Fonctionnalités à implémenter:</h2>
-          <ul class="list-disc list-inside space-y-2">
-            <li class="text-muted-foreground">List Groups</li>
-            <li class="text-muted-foreground">Create Group</li>
-            <li class="text-muted-foreground">Join Group</li>
-          </ul>
+    <div *ngIf="!isLoading" class="space-y-8">
+      <!-- Tab Navigation -->
+      <div class="flex border-b border-border">
+        <button
+          (click)="setTab('discover')"
+          [class.border-primary]="currentTab === 'discover'"
+          [class.text-foreground]="currentTab === 'discover'"
+          [class.text-muted-foreground]="currentTab !== 'discover'"
+          class="px-6 py-3 border-b-2 border-transparent hover:text-foreground transition-colors">
+          {{ 'groups.tabs.discover' | translate }}
+        </button>
+        <button
+          (click)="setTab('myGroups')"
+          [class.border-primary]="currentTab === 'myGroups'"
+          [class.text-foreground]="currentTab === 'myGroups'"
+          [class.text-muted-foreground]="currentTab !== 'myGroups'"
+          class="px-6 py-3 border-b-2 border-transparent hover:text-foreground transition-colors">
+          {{ 'groups.tabs.myGroups' | translate }} ({{ myGroups.length }})
+        </button>
+      </div>
+
+      <!-- Discover Tab -->
+      <div *ngIf="currentTab === 'discover'" class="space-y-6">
+        <!-- Search and Filters -->
+        <div class="glass rounded-lg p-6">
+          <div class="flex flex-col md:flex-row gap-4">
+            <!-- Search Bar -->
+            <div class="flex-1">
+              <div class="relative">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  [(ngModel)]="searchQuery"
+                  placeholder="{{ 'groups.searchPlaceholder' | translate }}"
+                  class="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary">
+              </div>
+            </div>
+
+            <!-- Category Filter -->
+            <select
+              [(ngModel)]="selectedCategory"
+              (change)="setCategory(selectedCategory)"
+              class="px-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary">
+              <option *ngFor="let cat of categories" [value]="cat.value">
+                {{ cat.label | translate }}
+              </option>
+            </select>
+          </div>
         </div>
+
+        <!-- Featured Groups -->
+        <div *ngIf="featuredGroups.length > 0 && selectedCategory === 'all' && !searchQuery" class="space-y-4">
+          <h2 class="text-2xl font-bold text-foreground">{{ 'groups.featured' | translate }}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div *ngFor="let group of featuredGroups" class="glass rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+              <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getCategoryIcon(group.category)" />
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-foreground mb-1">{{ group.name }}</h3>
+                  <p class="text-sm text-muted-foreground">{{ group.memberCount }} {{ 'groups.members' | translate }}</p>
+                </div>
+              </div>
+              <p class="text-muted-foreground text-sm mb-4 line-clamp-2">{{ group.description }}</p>
+              <div class="flex items-center justify-between">
+                <div class="flex gap-2">
+                  <span *ngFor="let tag of group.tags.slice(0, 2)" class="px-2 py-1 bg-muted rounded-full text-xs">
+                    {{ tag }}
+                  </span>
+                </div>
+                <button
+                  *ngIf="!group.isMember && !group.isPending"
+                  (click)="openJoinModal(group)"
+                  class="text-primary hover:text-primary/80 text-sm font-medium">
+                  {{ 'groups.join' | translate }}
+                </button>
+                <span *ngIf="group.isMember" class="text-sm text-green-600 font-medium">
+                  {{ 'groups.member' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- All Groups Grid -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-foreground">
+            {{ selectedCategory === 'all' ? ('groups.allGroups' | translate) : (selectedCategory | translate) }}
+          </h2>
+
+          <!-- Groups Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let group of filteredGroups" class="glass rounded-lg p-6 hover:shadow-lg transition-all">
+              <!-- Group Header -->
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-start gap-3 flex-1">
+                  <div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getCategoryIcon(group.category)" />
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-foreground mb-1 truncate">{{ group.name }}</h3>
+                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      <span>{{ group.memberCount }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span *ngIf="!group.isPublic" class="text-xs text-muted-foreground">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Group Description -->
+              <p class="text-sm text-muted-foreground mb-4 line-clamp-3">{{ group.description }}</p>
+
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span *ngFor="let tag of group.tags.slice(0, 3)" class="px-2 py-1 bg-muted rounded-full text-xs text-foreground">
+                  #{{ tag }}
+                </span>
+              </div>
+
+              <!-- Created By -->
+              <div class="text-xs text-muted-foreground mb-4">
+                {{ 'groups.createdBy' | translate }} {{ group.createdBy }} • {{ group.createdAt }}
+              </div>
+
+              <!-- Action Button -->
+              <div class="flex gap-2">
+                <button
+                  *ngIf="!group.isMember && !group.isPending"
+                  (click)="openJoinModal(group)"
+                  class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 text-sm">
+                  {{ group.isPublic ? ('groups.join' | translate) : ('groups.requestJoin' | translate) }}
+                </button>
+                <button
+                  *ngIf="group.isMember"
+                  (click)="leaveGroup(group.id)"
+                  class="flex-1 rounded-full border border-border hover:bg-muted text-foreground px-4 py-2 text-sm">
+                  {{ 'groups.leave' | translate }}
+                </button>
+                <span
+                  *ngIf="group.isPending"
+                  class="flex-1 text-center rounded-full border border-yellow-500 text-yellow-600 px-4 py-2 text-sm">
+                  {{ 'groups.pending' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="filteredGroups.length === 0" class="text-center py-12">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+              <svg class="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <p class="text-muted-foreground mb-4">{{ 'groups.noGroupsFound' | translate }}</p>
+            <button
+              (click)="openCreateModal()"
+              class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+              {{ 'groups.createFirst' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Groups Tab -->
+      <div *ngIf="currentTab === 'myGroups'" class="space-y-6">
+        <div *ngIf="myGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let group of myGroups" class="glass rounded-lg p-6 hover:shadow-lg transition-all">
+            <!-- Group Header -->
+            <div class="flex items-start gap-3 mb-4">
+              <div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getCategoryIcon(group.category)" />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-foreground mb-1">{{ group.name }}</h3>
+                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span>{{ group.memberCount }} {{ 'groups.members' | translate }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Group Description -->
+            <p class="text-sm text-muted-foreground mb-4 line-clamp-3">{{ group.description }}</p>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span *ngFor="let tag of group.tags.slice(0, 3)" class="px-2 py-1 bg-muted rounded-full text-xs">
+                #{{ tag }}
+              </span>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-2">
+              <button
+                routerLink="/groups/{{ group.id }}"
+                class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 text-sm">
+                {{ 'groups.viewGroup' | translate }}
+              </button>
+              <button
+                (click)="leaveGroup(group.id)"
+                class="rounded-full border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground px-4 py-2 text-sm">
+                {{ 'groups.leave' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="myGroups.length === 0" class="text-center py-12">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+            <svg class="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-foreground mb-2">{{ 'groups.noGroupsYet' | translate }}</h3>
+          <p class="text-muted-foreground mb-6">{{ 'groups.noGroupsYetText' | translate }}</p>
+          <div class="flex gap-4 justify-center">
+            <button
+              (click)="setTab('discover')"
+              class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+              {{ 'groups.discoverGroups' | translate }}
+            </button>
+            <button
+              (click)="openCreateModal()"
+              class="rounded-full border border-border hover:bg-muted text-foreground px-6 py-2">
+              {{ 'groups.createGroup' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Group Modal -->
+<div
+  *ngIf="showCreateModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  (click)="closeCreateModal()">
+  <div class="glass rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <h3 class="text-2xl font-bold text-foreground mb-6">{{ 'groups.createGroupTitle' | translate }}</h3>
+
+    <form [formGroup]="createGroupForm" (ngSubmit)="submitCreateGroup()" class="space-y-4">
+      <!-- Group Name -->
+      <div>
+        <label class="block text-sm font-medium text-foreground mb-2">{{ 'groups.form.name' | translate }}</label>
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="{{ 'groups.form.namePlaceholder' | translate }}"
+          class="w-full px-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary">
+        <div *ngIf="createGroupForm.get('name')?.invalid && createGroupForm.get('name')?.touched" class="text-sm text-destructive mt-1">
+          {{ 'groups.form.nameError' | translate }}
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-sm font-medium text-foreground mb-2">{{ 'groups.form.description' | translate }}</label>
+        <textarea
+          formControlName="description"
+          rows="4"
+          placeholder="{{ 'groups.form.descriptionPlaceholder' | translate }}"
+          class="w-full px-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"></textarea>
+        <div *ngIf="createGroupForm.get('description')?.invalid && createGroupForm.get('description')?.touched" class="text-sm text-destructive mt-1">
+          {{ 'groups.form.descriptionError' | translate }}
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div>
+        <label class="block text-sm font-medium text-foreground mb-2">{{ 'groups.form.category' | translate }}</label>
+        <select
+          formControlName="category"
+          class="w-full px-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary">
+          <option *ngFor="let cat of categories.slice(1)" [value]="cat.value">
+            {{ cat.label | translate }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Privacy -->
+      <div class="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+        <div>
+          <div class="font-medium text-foreground">{{ 'groups.form.publicGroup' | translate }}</div>
+          <div class="text-sm text-muted-foreground">{{ 'groups.form.publicGroupText' | translate }}</div>
+        </div>
+        <button
+          type="button"
+          (click)="createGroupForm.patchValue({ isPublic: !createGroupForm.value.isPublic })"
+          [class.bg-primary]="createGroupForm.value.isPublic"
+          [class.bg-muted]="!createGroupForm.value.isPublic"
+          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors">
+          <span
+            [class.translate-x-6]="createGroupForm.value.isPublic"
+            [class.translate-x-1]="!createGroupForm.value.isPublic"
+            class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform">
+          </span>
+        </button>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3 pt-4">
+        <button
+          type="button"
+          (click)="closeCreateModal()"
+          class="flex-1 rounded-full border border-border hover:bg-muted px-6 py-2">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button
+          type="submit"
+          [disabled]="createGroupForm.invalid"
+          [class.opacity-50]="createGroupForm.invalid"
+          [class.cursor-not-allowed]="createGroupForm.invalid"
+          class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+          {{ 'common.create' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Join Group Modal -->
+<div
+  *ngIf="showJoinModal && selectedGroup"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  (click)="closeJoinModal()">
+  <div class="glass rounded-lg p-6 max-w-md w-full" (click)="$event.stopPropagation()">
+    <h3 class="text-xl font-bold text-foreground mb-4">
+      {{ selectedGroup.isPublic ? ('groups.joinTitle' | translate) : ('groups.requestJoinTitle' | translate) }}
+    </h3>
+
+    <!-- Group Info -->
+    <div class="flex items-start gap-3 mb-6 p-4 bg-muted/50 rounded-lg">
+      <div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getCategoryIcon(selectedGroup.category)" />
+        </svg>
+      </div>
+      <div class="flex-1">
+        <h4 class="font-bold text-foreground mb-1">{{ selectedGroup.name }}</h4>
+        <p class="text-sm text-muted-foreground">{{ selectedGroup.memberCount }} {{ 'groups.members' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- Join Message (for private groups) -->
+    <form *ngIf="!selectedGroup.isPublic" [formGroup]="joinRequestForm" (ngSubmit)="submitJoinRequest()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-foreground mb-2">{{ 'groups.form.joinMessage' | translate }}</label>
+        <textarea
+          formControlName="message"
+          rows="3"
+          placeholder="{{ 'groups.form.joinMessagePlaceholder' | translate }}"
+          class="w-full px-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"></textarea>
+        <div *ngIf="joinRequestForm.get('message')?.invalid && joinRequestForm.get('message')?.touched" class="text-sm text-destructive mt-1">
+          {{ 'groups.form.joinMessageError' | translate }}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="closeJoinModal()"
+          class="flex-1 rounded-full border border-border hover:bg-muted px-6 py-2">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button
+          type="submit"
+          [disabled]="joinRequestForm.invalid"
+          [class.opacity-50]="joinRequestForm.invalid"
+          [class.cursor-not-allowed]="joinRequestForm.invalid"
+          class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+          {{ 'groups.sendRequest' | translate }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Direct Join (for public groups) -->
+    <div *ngIf="selectedGroup.isPublic" class="space-y-4">
+      <p class="text-muted-foreground">{{ 'groups.joinConfirmText' | translate }}</p>
+      <div class="flex gap-3">
+        <button
+          (click)="closeJoinModal()"
+          class="flex-1 rounded-full border border-border hover:bg-muted px-6 py-2">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button
+          (click)="submitJoinRequest()"
+          class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+          {{ 'groups.join' | translate }}
+        </button>
       </div>
     </div>
   </div>

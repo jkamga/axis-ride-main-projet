@@ -42,7 +42,16 @@
     "contact": "Contact",
     "legal": "Légal",
     "copyright": "© 2025 AxisRide. Tous droits réservés.",
-    "freeAccount": "Créer un compte gratuit"
+    "freeAccount": "Créer un compte gratuit",
+    "yes": "Oui",
+    "no": "Non",
+    "select": "Sélectionner",
+    "optional": "Optionnel",
+    "actions": "Actions",
+    "allStatuses": "Tous les statuts",
+    "allRoles": "Tous les rôles",
+    "add": "Ajouter",
+    "create": "Créer"
   },
   "nav": {
     "home": "Accueil",
@@ -517,5 +526,194 @@
     "unauthorized": "Non autorisé",
     "notFound": "Page non trouvée",
     "serverError": "Erreur serveur"
+  },
+  "pricing": {
+    "title": "Tarification simple et transparente",
+    "subtitle": "Choisissez le plan qui vous convient",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "save": "Économisez 20%",
+    "compareFeatures": "Comparer les fonctionnalités",
+    "faq": "Questions fréquentes",
+    "plans": {
+      "free": {
+        "name": "Gratuit",
+        "description": "Pour les voyageurs occasionnels",
+        "button": "Commencer",
+        "feature1": "Réservation instantanée",
+        "feature2": "Support basique",
+        "feature3": "Jusqu'à 5 trajets/mois",
+        "feature4": "Recherche standard"
+      },
+      "basic": {
+        "name": "Basic",
+        "description": "Pour les usagers réguliers",
+        "button": "Essai gratuit",
+        "feature1": "Trajets illimités",
+        "feature2": "Support prioritaire",
+        "feature3": "Badge vérifié",
+        "feature4": "Annulation flexible",
+        "feature5": "Filtres avancés"
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "Pour les utilisateurs actifs",
+        "button": "Essai gratuit",
+        "feature1": "Tout dans Basic",
+        "feature2": "Support 24/7",
+        "feature3": "Moyens de paiement multiples",
+        "feature4": "Analyses d'utilisation",
+        "feature5": "Réductions groupées",
+        "feature6": "Accès API"
+      },
+      "enterprise": {
+        "name": "Entreprise",
+        "description": "Pour les organisations",
+        "button": "Contacter les ventes",
+        "feature1": "Tout dans Premium",
+        "feature2": "Image de marque personnalisée",
+        "feature3": "Gestionnaire de compte dédié",
+        "feature4": "Intégrations personnalisées",
+        "feature5": "Rapports avancés"
+      },
+      "period": {
+        "month": "mois",
+        "year": "an",
+        "custom": "Personnalisé"
+      }
+    },
+    "features": {
+      "unlimitedTrips": "Trajets illimités",
+      "prioritySupport": "Support prioritaire",
+      "verifiedBadge": "Badge vérifié",
+      "advancedFilters": "Filtres avancés",
+      "instantBooking": "Réservation instantanée",
+      "cancellation": "Annulation flexible",
+      "multiplePayments": "Moyens de paiement multiples",
+      "groupDiscounts": "Réductions groupées",
+      "analytics": "Analyses d'utilisation",
+      "customBranding": "Image de marque personnalisée",
+      "apiAccess": "Accès API",
+      "dedicatedManager": "Gestionnaire de compte dédié"
+    },
+    "faq": {
+      "question1": "Puis-je changer de plan à tout moment ?",
+      "answer1": "Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. Les modifications prennent effet immédiatement.",
+      "question2": "Quels moyens de paiement acceptez-vous ?",
+      "answer2": "Nous acceptons les cartes bancaires, le mobile money (Orange Money, Wave, etc.) et les virements bancaires.",
+      "question3": "Y a-t-il un essai gratuit ?",
+      "answer3": "Oui, tous les plans payants incluent un essai gratuit de 14 jours. Aucune carte bancaire requise.",
+      "question4": "Que se passe-t-il si j'annule ?",
+      "answer4": "Vous pouvez annuler à tout moment. Votre abonnement reste actif jusqu'à la fin de la période de facturation.",
+      "question5": "Proposez-vous des remboursements ?",
+      "answer5": "Oui, nous proposons un remboursement complet sous 30 jours si vous n'êtes pas satisfait."
+    }
+  },
+  "subscription": {
+    "title": "Mon abonnement",
+    "subtitle": "Gérez votre abonnement et votre facturation",
+    "tabs": {
+      "overview": "Aperçu",
+      "billing": "Historique de facturation",
+      "payment": "Moyens de paiement"
+    },
+    "noSubscription": "Aucun abonnement actif",
+    "noSubscriptionText": "Vous n'avez pas encore d'abonnement actif. Choisissez un plan pour commencer.",
+    "viewPlans": "Voir les plans",
+    "plan": "Plan",
+    "per": "par",
+    "billingCycle": {
+      "monthly": "mois",
+      "yearly": "an"
+    },
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "autoRenew": "Renouvellement automatique",
+    "autoRenewText": "Renouveler automatiquement votre abonnement",
+    "upgrade": "Passer à un plan supérieur",
+    "downgrade": "Passer à un plan inférieur",
+    "cancel": "Annuler l'abonnement",
+    "cancelTitle": "Annuler l'abonnement ?",
+    "cancelText": "Êtes-vous sûr de vouloir annuler votre abonnement ? Vous perdrez l'accès aux fonctionnalités premium.",
+    "invoiceHistory": "Historique des factures",
+    "invoice": "Facture",
+    "date": "Date",
+    "amount": "Montant",
+    "status": {
+      "label": "Statut",
+      "active": "Actif",
+      "cancelled": "Annulé",
+      "expired": "Expiré",
+      "paid": "Payé",
+      "pending": "En attente",
+      "failed": "Échoué"
+    },
+    "actions": "Actions",
+    "noInvoices": "Aucune facture pour le moment",
+    "paymentMethods": "Moyens de paiement",
+    "addPayment": "Ajouter un moyen de paiement",
+    "addPaymentTitle": "Ajouter un moyen de paiement",
+    "paymentType": "Type de paiement",
+    "card": "Carte",
+    "mobile": "Mobile Money",
+    "bank": "Virement bancaire",
+    "default": "Par défaut",
+    "expires": "Expire",
+    "setDefault": "Définir par défaut",
+    "noPaymentMethods": "Aucun moyen de paiement pour le moment",
+    "paymentFormPlaceholder": "Intégration du formulaire de paiement à venir"
+  },
+  "groups": {
+    "title": "Groupes communautaires",
+    "subtitle": "Découvrez et rejoignez des groupes de covoiturage dans votre région",
+    "createGroup": "Créer un groupe",
+    "tabs": {
+      "discover": "Découvrir les groupes",
+      "myGroups": "Mes groupes"
+    },
+    "searchPlaceholder": "Rechercher des groupes...",
+    "categories": {
+      "all": "Toutes les catégories",
+      "carpooling": "Covoiturage",
+      "commute": "Trajets quotidiens",
+      "roadTrips": "Road trips",
+      "events": "Événements",
+      "business": "Affaires",
+      "other": "Autre"
+    },
+    "featured": "Groupes en vedette",
+    "allGroups": "Tous les groupes",
+    "members": "membres",
+    "member": "Membre",
+    "join": "Rejoindre",
+    "leave": "Quitter le groupe",
+    "requestJoin": "Demander à rejoindre",
+    "pending": "En attente",
+    "viewGroup": "Voir le groupe",
+    "createdBy": " par",
+    "noGroupsFound": "Aucun groupe trouvé",
+    "createFirst": "Créer le premier groupe",
+    "noGroupsYet": "Vous n'avez rejoint aucun groupe pour le moment",
+    "noGroupsYetText": "Découvrez des groupes ou créez le vôtre pour commencer à vous connecter avec d'autres voyageurs",
+    "discoverGroups": "Découvrir les groupes",
+    "createGroupTitle": "Créer un nouveau groupe",
+    "form": {
+      "name": "Nom du groupe",
+      "namePlaceholder": "ex: Covoiturage Dakar-Thiès quotidien",
+      "nameError": "Le nom du groupe doit contenir au moins 3 caractères",
+      "description": "Description",
+      "descriptionPlaceholder": "Décrivez votre groupe et son objectif...",
+      "descriptionError": "La description doit contenir au moins 10 caractères",
+      "category": "Catégorie",
+      "publicGroup": "Groupe public",
+      "publicGroupText": "Tout le monde peut rejoindre ce groupe immédiatement",
+      "joinMessage": "Message (Optionnel)",
+      "joinMessagePlaceholder": "Présentez-vous et expliquez pourquoi vous voulez rejoindre...",
+      "joinMessageError": "Le message doit contenir au moins 10 caractères pour les groupes privés"
+    },
+    "joinTitle": "Rejoindre le groupe",
+    "requestJoinTitle": "Demander à rejoindre",
+    "joinConfirmText": "Vous serez ajouté à ce groupe immédiatement.",
+    "sendRequest": "Envoyer la demande"
   }
 }

@@ -1,10 +1,10 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   # Infrastructure Services
   
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: zookeeper:latest
     container_name: axisride-zookeeper
     ports:
       - "2181:2181"
@@ -21,7 +21,7 @@ services:
       - axisride-network
 
   kafka:
-    image: bitnami/kafka:latest
+    image: apache/kafka:latest
     container_name: axisride-kafka
     ports:
       - "9092:9092"

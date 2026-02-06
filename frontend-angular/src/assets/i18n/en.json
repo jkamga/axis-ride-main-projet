@@ -754,7 +754,9 @@
     "optional": "Optional",
     "actions": "Actions",
     "allStatuses": "All Statuses",
-    "allRoles": "All Roles"
+    "allRoles": "All Roles",
+    "add": "Add",
+    "create": "Create"
   },
   "errors": {
     "generic": "An error occurred",
@@ -762,5 +764,194 @@
     "unauthorized": "Unauthorized",
     "notFound": "Page not found",
     "serverError": "Server error"
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Choose the plan that's right for you",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save 20%",
+    "compareFeatures": "Compare features",
+    "faq": "Frequently Asked Questions",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "description": "For occasional travelers",
+        "button": "Get Started",
+        "feature1": "Instant booking",
+        "feature2": "Basic support",
+        "feature3": "Up to 5 trips/month",
+        "feature4": "Standard search"
+      },
+      "basic": {
+        "name": "Basic",
+        "description": "For regular commuters",
+        "button": "Start Free Trial",
+        "feature1": "Unlimited trips",
+        "feature2": "Priority support",
+        "feature3": "Verified badge",
+        "feature4": "Flexible cancellation",
+        "feature5": "Advanced filters"
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "For power users",
+        "button": "Start Free Trial",
+        "feature1": "Everything in Basic",
+        "feature2": "24/7 support",
+        "feature3": "Multiple payment methods",
+        "feature4": "Usage analytics",
+        "feature5": "Group discounts",
+        "feature6": "API access"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "For organizations",
+        "button": "Contact Sales",
+        "feature1": "Everything in Premium",
+        "feature2": "Custom branding",
+        "feature3": "Dedicated account manager",
+        "feature4": "Custom integrations",
+        "feature5": "Advanced reporting"
+      },
+      "period": {
+        "month": "month",
+        "year": "year",
+        "custom": "Custom"
+      }
+    },
+    "features": {
+      "unlimitedTrips": "Unlimited trips",
+      "prioritySupport": "Priority support",
+      "verifiedBadge": "Verified badge",
+      "advancedFilters": "Advanced filters",
+      "instantBooking": "Instant booking",
+      "cancellation": "Flexible cancellation",
+      "multiplePayments": "Multiple payment methods",
+      "groupDiscounts": "Group discounts",
+      "analytics": "Usage analytics",
+      "customBranding": "Custom branding",
+      "apiAccess": "API access",
+      "dedicatedManager": "Dedicated account manager"
+    },
+    "faq": {
+      "question1": "Can I change my plan at any time?",
+      "answer1": "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+      "question2": "What payment methods do you accept?",
+      "answer2": "We accept credit cards, mobile money (Orange Money, Wave, etc.), and bank transfers.",
+      "question3": "Is there a free trial?",
+      "answer3": "Yes, all paid plans include a 14-day free trial. No credit card required.",
+      "question4": "What happens if I cancel?",
+      "answer4": "You can cancel at any time. Your subscription remains active until the end of the billing period.",
+      "question5": "Do you offer refunds?",
+      "answer5": "Yes, we offer a full refund within 30 days if you're not satisfied."
+    }
+  },
+  "subscription": {
+    "title": "My Subscription",
+    "subtitle": "Manage your subscription and billing",
+    "tabs": {
+      "overview": "Overview",
+      "billing": "Billing History",
+      "payment": "Payment Methods"
+    },
+    "noSubscription": "No active subscription",
+    "noSubscriptionText": "You don't have an active subscription yet. Choose a plan to get started.",
+    "viewPlans": "View Plans",
+    "plan": "Plan",
+    "per": "per",
+    "billingCycle": {
+      "monthly": "month",
+      "yearly": "year"
+    },
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "autoRenew": "Auto-renewal",
+    "autoRenewText": "Automatically renew your subscription",
+    "upgrade": "Upgrade Plan",
+    "downgrade": "Downgrade Plan",
+    "cancel": "Cancel Subscription",
+    "cancelTitle": "Cancel Subscription?",
+    "cancelText": "Are you sure you want to cancel your subscription? You'll lose access to premium features.",
+    "invoiceHistory": "Invoice History",
+    "invoice": "Invoice",
+    "date": "Date",
+    "amount": "Amount",
+    "status": {
+      "label": "Status",
+      "active": "Active",
+      "cancelled": "Cancelled",
+      "expired": "Expired",
+      "paid": "Paid",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "actions": "Actions",
+    "noInvoices": "No invoices yet",
+    "paymentMethods": "Payment Methods",
+    "addPayment": "Add Payment Method",
+    "addPaymentTitle": "Add Payment Method",
+    "paymentType": "Payment Type",
+    "card": "Card",
+    "mobile": "Mobile Money",
+    "bank": "Bank Transfer",
+    "default": "Default",
+    "expires": "Expires",
+    "setDefault": "Set as Default",
+    "noPaymentMethods": "No payment methods yet",
+    "paymentFormPlaceholder": "Payment form integration coming soon"
+  },
+  "groups": {
+    "title": "Community Groups",
+    "subtitle": "Discover and join carpooling groups in your area",
+    "createGroup": "Create Group",
+    "tabs": {
+      "discover": "Discover Groups",
+      "myGroups": "My Groups"
+    },
+    "searchPlaceholder": "Search groups...",
+    "categories": {
+      "all": "All Categories",
+      "carpooling": "Carpooling",
+      "commute": "Daily Commute",
+      "roadTrips": "Road Trips",
+      "events": "Events",
+      "business": "Business",
+      "other": "Other"
+    },
+    "featured": "Featured Groups",
+    "allGroups": "All Groups",
+    "members": "members",
+    "member": "Member",
+    "join": "Join",
+    "leave": "Leave Group",
+    "requestJoin": "Request to Join",
+    "pending": "Pending",
+    "viewGroup": "View Group",
+    "createdBy": " by",
+    "noGroupsFound": "No groups found",
+    "createFirst": "Create the first group",
+    "noGroupsYet": "You haven't joined any groups yet",
+    "noGroupsYetText": "Discover groups or create your own to start connecting with other travelers",
+    "discoverGroups": "Discover Groups",
+    "createGroupTitle": "Create a New Group",
+    "form": {
+      "name": "Group Name",
+      "namePlaceholder": "e.g., Dakar-Thiès Daily Commute",
+      "nameError": "Group name must be at least 3 characters",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your group and its purpose...",
+      "descriptionError": "Description must be at least 10 characters",
+      "category": "Category",
+      "publicGroup": "Public Group",
+      "publicGroupText": "Anyone can join this group immediately",
+      "joinMessage": "Message (Optional)",
+      "joinMessagePlaceholder": "Introduce yourself and explain why you want to join...",
+      "joinMessageError": "Message must be at least 10 characters for private groups"
+    },
+    "joinTitle": "Join Group",
+    "requestJoinTitle": "Request to Join",
+    "joinConfirmText": "You'll be added to this group immediately.",
+    "sendRequest": "Send Request"
   }
 }

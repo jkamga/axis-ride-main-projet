@@ -1,35 +1,341 @@
-<!-- Subscription -->
-<div class="min-h-screen bg-background">
-  <!-- Navigation placeholder -->
-  <div class="h-16"></div>
-
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold font-heading mb-8">Subscription</h1>
-    
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="animate-pulse">
-      <div class="h-8 bg-muted rounded mb-4 w-1/2"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-3/4"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-2/3"></div>
+<div class="min-h-screen bg-background py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-foreground mb-2">{{ 'subscription.title' | translate }}</h1>
+      <p class="text-muted-foreground">{{ 'subscription.subtitle' | translate }}</p>
     </div>
 
-    <!-- Main Content -->
-    <div *ngIf="!isLoading">
-      <div class="bg-card rounded-xl p-8 border border-border">
-        <p class="text-muted-foreground mb-4">
-          Cette page est en cours de conversion depuis React (SubscriptionPage.jsx).
-        </p>
-        
-        <div class="space-y-4">
-          <h2 class="text-2xl font-semibold font-heading">Fonctionnalités à implémenter:</h2>
-          <ul class="list-disc list-inside space-y-2">
-            <li class="text-muted-foreground">Plans</li>
-            <li class="text-muted-foreground">Payment</li>
-            <li class="text-muted-foreground">Management</li>
-          </ul>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="space-y-6">
+      <div class="glass rounded-lg p-6 animate-pulse">
+        <div class="h-8 bg-muted rounded w-1/4 mb-4"></div>
+        <div class="h-4 bg-muted rounded w-1/2 mb-2"></div>
+        <div class="h-4 bg-muted rounded w-1/3"></div>
+      </div>
+    </div>
+
+    <!-- No Subscription State -->
+    <div *ngIf="!isLoading && !subscription" class="glass rounded-lg p-12 text-center">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+        <svg class="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-foreground mb-2">{{ 'subscription.noSubscription' | translate }}</h2>
+      <p class="text-muted-foreground mb-6">{{ 'subscription.noSubscriptionText' | translate }}</p>
+      <button routerLink="/pricing" class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3">
+        {{ 'subscription.viewPlans' | translate }}
+      </button>
+    </div>
+
+    <!-- Active Subscription -->
+    <div *ngIf="!isLoading && subscription" class="space-y-6">
+      <!-- Tab Navigation -->
+      <div class="flex border-b border-border">
+        <button
+          (click)="setTab('overview')"
+          [class.border-primary]="currentTab === 'overview'"
+          [class.text-foreground]="currentTab === 'overview'"
+          [class.text-muted-foreground]="currentTab !== 'overview'"
+          class="px-6 py-3 border-b-2 border-transparent hover:text-foreground transition-colors">
+          {{ 'subscription.tabs.overview' | translate }}
+        </button>
+        <button
+          (click)="setTab('billing')"
+          [class.border-primary]="currentTab === 'billing'"
+          [class.text-foreground]="currentTab === 'billing'"
+          [class.text-muted-foreground]="currentTab !== 'billing'"
+          class="px-6 py-3 border-b-2 border-transparent hover:text-foreground transition-colors">
+          {{ 'subscription.tabs.billing' | translate }}
+        </button>
+        <button
+          (click)="setTab('payment')"
+          [class.border-primary]="currentTab === 'payment'"
+          [class.text-foreground]="currentTab === 'payment'"
+          [class.text-muted-foreground]="currentTab !== 'payment'"
+          class="px-6 py-3 border-b-2 border-transparent hover:text-foreground transition-colors">
+          {{ 'subscription.tabs.payment' | translate }}
+        </button>
+      </div>
+
+      <!-- Overview Tab -->
+      <div *ngIf="currentTab === 'overview'" class="space-y-6">
+        <!-- Current Plan Card -->
+        <div class="glass rounded-lg p-6">
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <h2 class="text-2xl font-bold text-foreground mb-2">{{ subscription.plan }} {{ 'subscription.plan' | translate }}</h2>
+              <span [class]="getStatusColor(subscription.status)" class="inline-flex px-3 py-1 rounded-full text-sm font-medium">
+                {{ 'subscription.status.' + subscription.status | translate }}
+              </span>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold text-foreground">{{ subscription.price / 100 }} FCFA</div>
+              <div class="text-sm text-muted-foreground">
+                {{ 'subscription.per' | translate }} {{ 'subscription.billingCycle.' + subscription.billingCycle | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <div class="text-sm text-muted-foreground mb-1">{{ 'subscription.startDate' | translate }}</div>
+              <div class="text-foreground font-medium">{{ subscription.startDate }}</div>
+            </div>
+            <div>
+              <div class="text-sm text-muted-foreground mb-1">{{ 'subscription.endDate' | translate }}</div>
+              <div class="text-foreground font-medium">{{ subscription.endDate }}</div>
+            </div>
+          </div>
+
+          <!-- Auto-Renew Toggle -->
+          <div class="flex items-center justify-between p-4 bg-muted/50 rounded-lg mb-6">
+            <div>
+              <div class="font-medium text-foreground">{{ 'subscription.autoRenew' | translate }}</div>
+              <div class="text-sm text-muted-foreground">{{ 'subscription.autoRenewText' | translate }}</div>
+            </div>
+            <button
+              (click)="toggleAutoRenew()"
+              [class.bg-primary]="subscription.autoRenew"
+              [class.bg-muted]="!subscription.autoRenew"
+              class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors">
+              <span
+                [class.translate-x-6]="subscription.autoRenew"
+                [class.translate-x-1]="!subscription.autoRenew"
+                class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform">
+              </span>
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-3">
+            <button
+              (click)="upgradePlan()"
+              *ngIf="subscription.status === 'active'"
+              class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3">
+              {{ 'subscription.upgrade' | translate }}
+            </button>
+            <button
+              (click)="downgradePlan()"
+              *ngIf="subscription.status === 'active'"
+              class="flex-1 rounded-full bg-muted hover:bg-muted/80 text-foreground px-6 py-3">
+              {{ 'subscription.downgrade' | translate }}
+            </button>
+            <button
+              (click)="openCancelModal()"
+              *ngIf="subscription.status === 'active'"
+              class="flex-1 rounded-full border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground px-6 py-3 transition-colors">
+              {{ 'subscription.cancel' | translate }}
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Billing Tab -->
+      <div *ngIf="currentTab === 'billing'" class="space-y-6">
+        <div class="glass rounded-lg p-6">
+          <h2 class="text-xl font-bold text-foreground mb-6">{{ 'subscription.invoiceHistory' | translate }}</h2>
+
+          <!-- Invoices Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-border">
+                  <th class="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{{ 'subscription.invoice' | translate }}</th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{{ 'subscription.date' | translate }}</th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{{ 'subscription.amount' | translate }}</th>
+                  <th class="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{{ 'subscription.status.label' | translate }}</th>
+                  <th class="text-right py-3 px-4 text-sm font-medium text-muted-foreground">{{ 'subscription.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let invoice of invoices" class="border-b border-border hover:bg-muted/50 transition-colors">
+                  <td class="py-4 px-4">
+                    <div class="font-medium text-foreground">{{ invoice.id }}</div>
+                    <div class="text-sm text-muted-foreground">{{ invoice.description }}</div>
+                  </td>
+                  <td class="py-4 px-4 text-foreground">{{ invoice.date }}</td>
+                  <td class="py-4 px-4 text-foreground font-medium">{{ invoice.amount / 100 }} FCFA</td>
+                  <td class="py-4 px-4">
+                    <span [class]="getStatusColor(invoice.status)" class="inline-flex px-2 py-1 rounded-full text-xs font-medium">
+                      {{ 'subscription.status.' + invoice.status | translate }}
+                    </span>
+                  </td>
+                  <td class="py-4 px-4 text-right">
+                    <button
+                      (click)="downloadInvoice(invoice)"
+                      class="text-primary hover:text-primary/80 text-sm font-medium">
+                      <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="invoices.length === 0" class="text-center py-12">
+            <div class="text-muted-foreground">{{ 'subscription.noInvoices' | translate }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Tab -->
+      <div *ngIf="currentTab === 'payment'" class="space-y-6">
+        <div class="glass rounded-lg p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-foreground">{{ 'subscription.paymentMethods' | translate }}</h2>
+            <button
+              (click)="openPaymentModal()"
+              class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+              {{ 'subscription.addPayment' | translate }}
+            </button>
+          </div>
+
+          <!-- Payment Methods List -->
+          <div class="space-y-4">
+            <div
+              *ngFor="let payment of paymentMethods"
+              class="flex items-center justify-between p-4 border border-border rounded-lg hover:border-primary/50 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
+                  <svg class="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getPaymentIcon(payment.type)" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-medium text-foreground">{{ payment.provider }}</span>
+                    <span *ngIf="payment.isDefault" class="px-2 py-0.5 bg-primary/20 text-primary text-xs rounded-full">
+                      {{ 'subscription.default' | translate }}
+                    </span>
+                  </div>
+                  <div class="text-sm text-muted-foreground">
+                    <span *ngIf="payment.last4">•••• {{ payment.last4 }}</span>
+                    <span *ngIf="payment.expiryDate"> • {{ 'subscription.expires' | translate }} {{ payment.expiryDate }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  *ngIf="!payment.isDefault"
+                  (click)="setDefaultPayment(payment.id)"
+                  class="text-sm text-primary hover:text-primary/80 font-medium">
+                  {{ 'subscription.setDefault' | translate }}
+                </button>
+                <button
+                  *ngIf="!payment.isDefault"
+                  (click)="removePaymentMethod(payment.id)"
+                  class="p-2 text-destructive hover:bg-destructive/10 rounded-lg">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="paymentMethods.length === 0" class="text-center py-12">
+            <div class="text-muted-foreground mb-4">{{ 'subscription.noPaymentMethods' | translate }}</div>
+            <button
+              (click)="openPaymentModal()"
+              class="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+              {{ 'subscription.addPayment' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Subscription Modal -->
+<div
+  *ngIf="showCancelModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  (click)="closeCancelModal()">
+  <div class="glass rounded-lg p-6 max-w-md w-full" (click)="$event.stopPropagation()">
+    <div class="flex items-start gap-4 mb-6">
+      <div class="w-12 h-12 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
+        <svg class="w-6 h-6 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <div class="flex-1">
+        <h3 class="text-xl font-bold text-foreground mb-2">{{ 'subscription.cancelTitle' | translate }}</h3>
+        <p class="text-muted-foreground">{{ 'subscription.cancelText' | translate }}</p>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button
+        (click)="closeCancelModal()"
+        class="flex-1 rounded-full border border-border hover:bg-muted px-6 py-2">
+        {{ 'common.no' | translate }}
+      </button>
+      <button
+        (click)="confirmCancel()"
+        class="flex-1 rounded-full bg-destructive hover:bg-destructive/90 text-destructive-foreground px-6 py-2">
+        {{ 'common.yes' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Payment Method Modal -->
+<div
+  *ngIf="showPaymentModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  (click)="closePaymentModal()">
+  <div class="glass rounded-lg p-6 max-w-md w-full" (click)="$event.stopPropagation()">
+    <h3 class="text-xl font-bold text-foreground mb-6">{{ 'subscription.addPaymentTitle' | translate }}</h3>
+
+    <div class="space-y-4 mb-6">
+      <!-- Payment Type Selection -->
+      <div>
+        <label class="block text-sm font-medium text-foreground mb-2">{{ 'subscription.paymentType' | translate }}</label>
+        <div class="grid grid-cols-3 gap-3">
+          <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors">
+            <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            <div class="text-xs">{{ 'subscription.card' | translate }}</div>
+          </button>
+          <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors">
+            <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            <div class="text-xs">{{ 'subscription.mobile' | translate }}</div>
+          </button>
+          <button class="p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors">
+            <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+            </svg>
+            <div class="text-xs">{{ 'subscription.bank' | translate }}</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Placeholder -->
+      <div class="text-sm text-muted-foreground text-center py-8 border border-dashed border-border rounded-lg">
+        {{ 'subscription.paymentFormPlaceholder' | translate }}
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <button
+        (click)="closePaymentModal()"
+        class="flex-1 rounded-full border border-border hover:bg-muted px-6 py-2">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        (click)="addPaymentMethod()"
+        class="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2">
+        {{ 'common.add' | translate }}
+      </button>
     </div>
   </div>
 </div>
