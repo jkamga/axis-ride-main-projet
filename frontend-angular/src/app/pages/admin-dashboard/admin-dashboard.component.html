@@ -1,34 +1,581 @@
-<!-- Admin Dashboard -->
 <div class="min-h-screen bg-background">
-  <!-- Navigation placeholder -->
-  <div class="h-16"></div>
-
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold font-heading mb-8">Admin Dashboard</h1>
-    
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="animate-pulse">
-      <div class="h-8 bg-muted rounded mb-4 w-1/2"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-3/4"></div>
-      <div class="h-4 bg-muted rounded mb-2 w-2/3"></div>
+  <!--Hero Section -->
+  <section class="bg-primary pt-24 pb-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold text-primary-foreground mb-2 font-['Outfit']">
+        {{ 'admin.title' | translate }}
+      </h1>
+      <p class="text-primary-foreground/80">
+        {{ 'admin.subtitle' | translate }}
+      </p>
     </div>
+  </section>
 
-    <!-- Main Content -->
-    <div *ngIf="!isLoading">
-      <div class="bg-card rounded-xl p-8 border border-border">
-        <p class="text-muted-foreground mb-4">
-          Cette page est en cours de conversion depuis React (AdminDashboard.jsx).
-        </p>
-        
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="max-w-7xl mx-auto px-4 py-8">
+    <div class="animate-pulse space-y-6">
+      <div class="grid md:grid-cols-4 gap-6">
+        <div *ngFor="let i of [1,2,3,4]" class="bg-card border border-border rounded-xl p-6 h-32"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <section *ngIf="!isLoading" class="py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Tabs -->
+      <div class="bg-card border border-border rounded-xl mb-6">
+        <div class="flex flex-wrap items-center gap-2 p-4">
+          <button
+            (click)="setTab('overview')"
+            [class.bg-primary]="currentTab === 'overview'"
+            [class.text-primary-foreground]="currentTab === 'overview'"
+            [class.hover:bg-muted]="currentTab !== 'overview'"
+            class="px-4 py-2 rounded-lg transition-colors">
+            {{ 'admin.tabs.overview' | translate }}
+          </button>
+          <button
+            (click)="setTab('users')"
+            [class.bg-primary]="currentTab === 'users'"
+            [class.text-primary-foreground]="currentTab === 'users'"
+[class.hover:bg-muted]="currentTab !== 'users'"
+            class="px-4 py-2 rounded-lg transition-colors">
+            {{ 'admin.tabs.users' | translate }}
+          </button>
+          <button
+            (click)="setTab('trips')"
+            [class.bg-primary]="currentTab === 'trips'"
+            [class.text-primary-foreground]="currentTab === 'trips'"
+            [class.hover:bg-muted]="currentTab !== 'trips'"
+            class="px-4 py-2 rounded-lg transition-colors">
+            {{ 'admin.tabs.trips' | translate }}
+          </button>
+          <button
+            (click)="setTab('reports')"
+            [class.bg-primary]="currentTab === 'reports'"
+            [class.text-primary-foreground]="currentTab === 'reports'"
+            [class.hover:bg-muted]="currentTab !== 'reports'"
+            class="px-4 py-2 rounded-lg transition-colors relative">
+            {{ 'admin.tabs.reports' | translate }}
+            <span *ngIf="pendingReportsCount > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+              {{ pendingReportsCount }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Overview Tab -->
+      <div *ngIf="currentTab === 'overview'">
+        <!-- Stats Cards -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div class="bg-card border border-border rounded-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.stats.totalUsers' | translate }}</p>
+            <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.totalUsers }}</p>
+            <p class="text-xs text-muted-foreground mt-1">
+              <span class="text-green-600">{{ stats.activeUsers }}</span> {{ 'admin.stats.active' | translate }}
+            </p>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center">
+                <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.stats.totalTrips' | translate }}</p>
+            <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.totalTrips }}</p>
+            <p class="text-xs text-muted-foreground mt-1">
+              <span class="text-green-600">{{ stats.activeTrips }}</span> {{ 'admin.stats.active' | translate }}
+            </p>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.stats.totalRevenue' | translate }}</p>
+            <p class="text-3xl font-bold text-foreground font-['Outfit']">{{ stats.totalRevenue / 1000 }}k</p>
+            <p class="text-xs text-muted-foreground mt-1">FCFA</p>
+          </div>
+        </div>
+
+        <!-- Pending Verifications Alert -->
+        <div *ngIf="stats.pendingVerifications > 0" class="bg-yellow-100 border border-yellow-300 rounded-xl p-6 mb-8 flex items-start gap-4">
+          <svg class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-yellow-900 mb-1">{{ 'admin.pendingVerifications' | translate }}</h3>
+            <p class="text-sm text-yellow-800">
+              {{ stats.pendingVerifications }} {{ 'admin.pendingVerificationsDesc' | translate }}
+            </p>
+            <button
+              (click)="setTab('users')"
+              class="mt-3 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium">
+              {{ 'admin.reviewNow' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-xl font-bold text-foreground mb-4 font-['Outfit']">
+              {{ 'admin.recentUsers' | translate }}
+            </h2>
+            <div class="space-y-3">
+              <div *ngFor="let user of users.slice(0, 5)" class="flex items-center justify-between p-3 hover:bg-muted/50 rounded-lg transition-colors cursor-pointer" (click)="viewUser(user)">
+                <div>
+                  <p class="font-medium text-foreground">{{ user.name }}</p>
+                  <p class="text-xs text-muted-foreground">{{ user.role | titlecase }} • {{ user.joinedDate | date }}</p>
+                </div>
+                <span [class]="getStatusColor(user.status) + ' text-xs px-2 py-1 rounded-full font-medium'">
+                  {{ user.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-xl font-bold text-foreground mb-4 font-['Outfit']">
+              {{ 'admin.recentTrips' | translate }}
+            </h2>
+            <div class="space-y-3">
+              <div *ngFor="let trip of trips.slice(0, 5)" class="flex items-center justify-between p-3 hover:bg-muted/50 rounded-lg transition-colors cursor-pointer" (click)="viewTrip(trip)">
+                <div>
+                  <p class="font-medium text-foreground">{{ trip.departure }} → {{ trip.destination }}</p>
+                  <p class="text-xs text-muted-foreground">{{ trip.date }} • {{ trip.driver }}</p>
+                </div>
+                <span [class]="getStatusColor(trip.status) + ' text-xs px-2 py-1 rounded-full font-medium'">
+                  {{ trip.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Tab -->
+      <div *ngIf="currentTab === 'users'">
+        <div class="bg-card border border-border rounded-xl p-6 mb-6">
+          <form [formGroup]="searchForm">
+            <div class="grid md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                formControlName="query"
+                placeholder="{{ 'admin.searchUsers' | translate }}"
+                class="h-12 rounded-xl border border-border bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary/40" />
+
+              <select formControlName="filterStatus" class="h-12 rounded-xl border border-border bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary/40">
+                <option value="all">{{ 'common.allStatuses' | translate }}</option>
+                <option value="active">{{ 'admin.status.active' | translate }}</option>
+                <option value="pending">{{ 'admin.status.pending' | translate }}</option>
+                <option value="suspended">{{ 'admin.status.suspended' | translate }}</option>
+              </select>
+
+              <select formControlName="filterRole" class="h-12 rounded-xl border border-border bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary/40">
+                <option value="all">{{ 'common.allRoles' | translate }}</option>
+                <option value="passenger">{{ 'admin.role.passenger' | translate }}</option>
+                <option value="driver">{{ 'admin.role.driver' | translate }}</option>
+                <option value="admin">{{ 'admin.role.admin' | translate }}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-muted">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.user' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.role' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.status' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.trips' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.joined' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'common.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border">
+                <tr *ngFor="let user of filteredUsers" class="hover:bg-muted/50 transition-colors">
+                  <td class="px-6 py-4">
+                    <div>
+                      <p class="font-medium text-foreground flex items-center gap-2">
+                        {{ user.name }}
+                        <svg *ngIf="user.verified" class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </p>
+                      <p class="text-sm text-muted-foreground">{{ user.email }}</p>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span [class]="getRoleColor(user.role) + ' text-xs px-2 py-1 rounded-full font-medium'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span [class]="getStatusColor(user.status) + ' text-xs px-2 py-1 rounded-full font-medium'">
+                      {{ user.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-foreground">{{ user.totalTrips }}</td>
+                  <td class="px-6 py-4 text-sm text-muted-foreground">{{ user.joinedDate | date }}</td>
+                  <td class="px-6 py-4">
+                    <button
+                      (click)="viewUser(user)"
+                      class="text-primary hover:text-primary/80 transition-colors text-sm font-medium">
+                      {{ 'admin.view' | translate }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="filteredUsers.length === 0" class="p-12 text-center">
+            <p class="text-muted-foreground">{{ 'admin.noUsersFound' | translate }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trips Tab -->
+      <div *ngIf="currentTab === 'trips'">
+        <div class="bg-card border border-border rounded-xl p-6 mb-6">
+          <form [formGroup]="searchForm">
+            <div class="grid md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                formControlName="query"
+                placeholder="{{ 'admin.searchTrips' | translate }}"
+                class="h-12 rounded-xl border border-border bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary/40" />
+
+              <select formControlName="filterStatus" class="h-12 rounded-xl border border-border bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary/40">
+                <option value="all">{{ 'common.allStatuses' | translate }}</option>
+                <option value="active">{{ 'admin.status.active' | translate }}</option>
+                <option value="completed">{{ 'admin.status.completed' | translate }}</option>
+                <option value="cancelled">{{ 'admin.status.cancelled' | translate }}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-muted">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.route' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.driver' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.date' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.seats' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.price' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'admin.status' | translate }}</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ 'common.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border">
+                <tr *ngFor="let trip of filteredTrips" class="hover:bg-muted/50 transition-colors">
+                  <td class="px-6 py-4">
+                    <p class="font-medium text-foreground">{{ trip.departure }} → {{ trip.destination }}</p>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-foreground">{{ trip.driver }}</td>
+                  <td class="px-6 py-4 text-sm text-muted-foreground">{{ trip.date }} {{ trip.time }}</td>
+                  <td class="px-6 py-4 text-sm text-foreground">{{ trip.bookedSeats }}/{{ trip.totalSeats }}</td>
+                  <td class="px-6 py-4 text-sm text-foreground">{{ trip.price }} FCFA</td>
+                  <td class="px-6 py-4">
+                    <span [class]="getStatusColor(trip.status) + ' text-xs px-2 py-1 rounded-full font-medium'">
+                      {{ trip.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <button
+                      (click)="viewTrip(trip)"
+                      class="text-primary hover:text-primary/80 transition-colors text-sm font-medium">
+                      {{ 'admin.view' | translate }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="filteredTrips.length === 0" class="p-12 text-center">
+            <p class="text-muted-foreground">{{ 'admin.noTripsFound' | translate }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Tab -->
+      <div *ngIf="currentTab === 'reports'">
+        <div class="bg-card border border-border rounded-xl p-6 mb-6">
+          <form [formGroup]="searchForm">
+            <select formControlName="filterStatus" class="h-12 rounded-xl border border-border bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary/40">
+              <option value="all">{{ 'common.allStatuses' | translate }}</option>
+              <option value="pending">{{ 'admin.status.pending' | translate }}</option>
+              <option value="resolved">{{ 'admin.status.resolved' | translate }}</option>
+              <option value="dismissed">{{ 'admin.status.dismissed' | translate }}</option>
+            </select>
+          </form>
+        </div>
+
         <div class="space-y-4">
-          <h2 class="text-2xl font-semibold font-heading">Fonctionnalités à implémenter:</h2>
-          <ul class="list-disc list-inside space-y-2">
-            <li class="text-muted-foreground">Users</li>
-            <li class="text-muted-foreground">Trips</li>
-            <li class="text-muted-foreground">Analytics</li>
-            <li class="text-muted-foreground">Moderation</li>
-          </ul>
+          <div *ngFor="let report of filteredReports" class="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer" (click)="viewReport(report)">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-semibold text-foreground">{{ report.type === 'user' ? 'User Report' : 'Trip Report' }}</p>
+                  <p class="text-sm text-muted-foreground">{{ report.date | date }}</p>
+                </div>
+              </div>
+              <span [class]="getStatusColor(report.status) + ' text-xs px-3 py-1 rounded-full font-medium'">
+                {{ report.status }}
+              </span>
+            </div>
+
+            <div class="space-y-2 text-sm">
+              <div class="flex gap-2">
+                <span class="text-muted-foreground">{{ 'admin.reportedBy' | translate }}:</span>
+                <span class="text-foreground font-medium">{{ report.reportedBy }}</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="text-muted-foreground">{{ 'admin.reportedItem' | translate }}:</span>
+                <span class="text-foreground font-medium">{{ report.reportedItem }}</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="text-muted-foreground">{{ 'admin.reason' | translate }}:</span>
+                <span class="text-foreground">{{ report.reason }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="filteredReports.length === 0" class="bg-card border border-border rounded-xl p-12 text-center">
+            <p class="text-muted-foreground">{{ 'admin.noReportsFound' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- User Modal -->
+  <div *ngIf="showUserModal && selectedUser" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="closeModals()">
+    <div class="bg-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-foreground font-['Outfit']">{{ selectedUser.name }}</h2>
+            <p class="text-sm text-muted-foreground">{{ selectedUser.email }}</p>
+          </div>
+          <button (click)="closeModals()" class="p-2 hover:bg-muted rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.role' | translate }}</p>
+              <span [class]="getRoleColor(selectedUser.role) + ' text-xs px-3 py-1 rounded-full font-medium'">
+                {{ selectedUser.role }}
+              </span>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.status' | translate }}</p>
+              <span [class]="getStatusColor(selectedUser.status) + ' text-xs px-3 py-1 rounded-full font-medium'">
+                {{ selectedUser.status }}
+              </span>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.totalTrips' | translate }}</p>
+              <p class="text-lg font-semibold text-foreground">{{ selectedUser.totalTrips }}</p>
+            </div>
+            <div *ngIf="selectedUser.rating">
+              <p class="text-sm text-muted-foreground mb-1">{{ 'profile.rating' | translate }}</p>
+              <p class="text-lg font-semibold text-foreground">{{ selectedUser.rating }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.joined' | translate }}</p>
+              <p class="text-lg font-semibold text-foreground">{{ selectedUser.joinedDate | date }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.verified' | translate }}</p>
+              <p class="text-lg font-semibold" [class]="selectedUser.verified ? 'text-green-600' : 'text-red-600'">
+                {{ selectedUser.verified ? ('common.yes' | translate) : ('common.no' | translate) }}
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-6 border-t border-border flex flex-wrap gap-3">
+            <button
+              *ngIf="!selectedUser.verified && selectedUser.status === 'pending'"
+              (click)="verifyUser(selectedUser.id)"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+              {{ 'admin.verifyUser' | translate }}
+            </button>
+
+            <button
+              *ngIf="selectedUser.status === 'active'"
+              (click)="updateUserStatus(selectedUser.id, 'suspended')"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              {{ 'admin.suspendUser' | translate }}
+            </button>
+
+            <button
+              *ngIf="selectedUser.status === 'suspended'"
+              (click)="updateUserStatus(selectedUser.id, 'active')"
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              {{ 'admin.activateUser' | translate }}
+            </button>
+
+            <button
+              (click)="closeModals()"
+              class="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+              {{ 'common.close' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trip Modal -->
+  <div *ngIf="showTripModal && selectedTrip" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="closeModals()">
+    <div class="bg-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-foreground font-['Outfit']">{{ selectedTrip.departure }} → {{ selectedTrip.destination }}</h2>
+            <p class="text-sm text-muted-foreground">{{ selectedTrip.date }} {{ selectedTrip.time }}</p>
+          </div>
+          <button (click)="closeModals()" class="p-2 hover:bg-muted rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.driver' | translate }}</p>
+              <p class="text-lg font-semibold text-foreground">{{ selectedTrip.driver }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.status' | translate }}</p>
+              <span [class]="getStatusColor(selectedTrip.status) + ' text-xs px-3 py-1 rounded-full font-medium'">
+                {{ selectedTrip.status }}
+              </span>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.seats' | translate }}</p>
+              <p class="text-lg font-semibold text-foreground">{{ selectedTrip.bookedSeats }}/{{ selectedTrip.totalSeats }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-muted-foreground mb-1">{{ 'admin.price' | translate }}</p>
+              <p class="text-lg font-semibold text-foreground">{{ selectedTrip.price }} FCFA</p>
+            </div>
+          </div>
+
+          <div class="pt-6 border-t border-border flex gap-3">
+            <button
+              *ngIf="selectedTrip.status === 'active'"
+              (click)="cancelTrip(selectedTrip.id)"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              {{ 'admin.cancelTrip' | translate }}
+            </button>
+
+            <button
+              (click)="closeModals()"
+              class="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+              {{ 'common.close' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div *ngIf="showReportModal && selectedReport" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="closeModals()">
+    <div class="bg-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-foreground font-['Outfit']">{{ selectedReport.type === 'user' ? ('admin.userReport' | translate) : ('admin.tripReport' | translate) }}</h2>
+            <p class="text-sm text-muted-foreground">{{ selectedReport.date | date }}</p>
+          </div>
+          <button (click)="closeModals()" class="p-2 hover:bg-muted rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.reportedBy' | translate }}</p>
+            <p class="text-lg font-semibold text-foreground">{{ selectedReport.reportedBy }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.reportedItem' | translate }}</p>
+            <p class="text-lg font-semibold text-foreground">{{ selectedReport.reportedItem }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.reason' | translate }}</p>
+            <p class="text-foreground">{{ selectedReport.reason }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-muted-foreground mb-1">{{ 'admin.status' | translate }}</p>
+            <span [class]="getStatusColor(selectedReport.status) + ' text-xs px-3 py-1 rounded-full font-medium'">
+              {{ selectedReport.status }}
+            </span>
+          </div>
+
+          <div *ngIf="selectedReport.status === 'pending'" class="pt-6 border-t border-border flex gap-3">
+            <button
+              (click)="resolveReport(selectedReport.id, 'resolved')"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+              {{ 'admin.resolveReport' | translate }}
+            </button>
+
+            <button
+              (click)="resolveReport(selectedReport.id, 'dismissed')"
+              class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+              {{ 'admin.dismissReport' | translate }}
+            </button>
+
+            <button
+              (click)="closeModals()"
+              class="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+              {{ 'common.close' | translate }}
+            </button>
+          </div>
+
+          <div *ngIf="selectedReport.status !== 'pending'" class="pt-6 border-t border-border">
+            <button
+              (click)="closeModals()"
+              class="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+              {{ 'common.close' | translate }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
